@@ -2,11 +2,10 @@
   "name": "color-splash-server",
   "version": "1.0.0",
   "description": "server for the game color splash made by the progarkship",
-  "main": "src/server.js",
+  "main": "src/server.ts",
   "scripts": {
     "build": "tsc",
-    "watch-ts": "tsc -w",
-    "start": "nodemon src/server.ts",
+    "start": "nodemon dist/server.js",
     "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript, Node\" -c \"yello.bold, cyan.bold\" \"yarn run watch-ts\" \"yarn run watch-node\"",
     "test": "mocha -r ts-node/register src/**/*.spec.ts"
   },
@@ -17,6 +16,7 @@
   "author": "progark gr5",
   "license": "ISC",
   "dependencies": {
+    "concurrently": "^7.0.0",
     "express": "^4.17.3",
     "nodemon": "^2.0.15",
     "socket.io": "^4.4.1"
@@ -24,7 +24,6 @@
   "devDependencies": {
     "@types/express": "^4.17.13",
     "@types/node": "^17.0.21",
-    "ts-node-dev": "^1.1.8",
     "typescript": "^4.6.2"
   }
 }

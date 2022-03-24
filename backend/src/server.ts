@@ -86,7 +86,7 @@ io.on("connection", (socket) => {
 });
 
 app.get("/", (_, res) => {
-  res.send(`Welcome to an Express server with websockets! port: ${port}`);
+  res.send(`Welcome to an Express server with websockets! port: ${port} hei`);
 });
 server.listen(port, (): void => {
   console.log(`Connected successfully on port ${port}`);
