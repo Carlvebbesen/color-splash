@@ -2,17 +2,17 @@
   "name": "color-splash-server",
   "version": "1.0.0",
   "description": "server for the game color splash made by the progarkship",
-  "main": "dist/server.js",
+  "main": "src/server.js",
   "scripts": {
     "build": "tsc",
     "watch-ts": "tsc -w",
-    "start": "nodemon dist/server.js",
+    "start": "nodemon src/server.ts",
     "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript, Node\" -c \"yello.bold, cyan.bold\" \"yarn run watch-ts\" \"yarn run watch-node\"",
     "test": "mocha -r ts-node/register src/**/*.spec.ts"
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.stud.idi.ntnu.no/haakote/color-splash.git"
+    "url": "https://github.com/Carlvebbesen/color-splash-server.git"
   },
   "author": "progark gr5",
   "license": "ISC",
