@@ -23,15 +23,15 @@ export const io = new socket.Server<
  * Workflow tips and tricks
  * When in doubt, use any;)
  * Dividing shit up into files and modules is nonessential at first,
- * implement methods closest to the shit you`re working with, 
+ * implement methods closest to the shit you`re working with,
  * and after a while, whenever it is possible, abstract away into
  * modules with functions.
  * console log every fucking thing, especially when things become undefined
  * Remember, most guides are for implementing a single room, when we
- * have to use multiple game rooms;) although the simplest thing is to 
- * follow a guide for one room, and when that works, simply scale up by 
+ * have to use multiple game rooms;) although the simplest thing is to
+ * follow a guide for one room, and when that works, simply scale up by
  * adding an array of rooms and loop through with a for-each loop
- * 
+ *
  * KEY reading - learn how to pass objects as arguments in a socket.io request!!
  */
 
@@ -39,20 +39,20 @@ io.on("connection", (socket) => {
   console.log("a user connected");
   socket.emit("hello", "world");
   socket.on("disconnect", () => disconnect);
-  socket.on('hostCreateNewGame', () => {
-    const gameID = (Math.random() * 100000) | 0
-    socket.emit('newGameCreated', {gameID: gameID, mySocketId: socket.id})
-    socket.join(gameID.toString()) /*this should work, joins a room
+  socket.on("hostCreateNewGame", () => {
+    const gameID = (Math.random() * 100000) | 0;
+    socket.emit("newGameCreated", { gameID: gameID, mySocketId: socket.id });
+    socket.join(gameID.toString()); /*this should work, joins a room
     where the set consists of 
     Set<string> {asdadadwaxadcdt (some random ass socket id string), 56741 - string id of room}
     string id of room is vital, and needs to be emited back to client.
     */
-    console.log("Tried to create game")
-    console.log(gameID)
-    console.log(socket.rooms)
-  })
-  socket.on('playerJoinGame', (gameID: string, name) => {
-    console.log(`Tries to join game with id ${gameID}`)
+    console.log("Tried to create game");
+    console.log(gameID);
+    console.log(socket.rooms);
+  });
+  socket.on("playerJoinGame", (gameID: string, name) => {
+    console.log(`Tries to join game with id ${gameID}`);
     /* The problem here, is that as of now we are
     unable to find the room with the game id in room set
     because of fucking typescript. Something to do with any
@@ -69,25 +69,24 @@ io.on("connection", (socket) => {
     to find out where the fuck our socket id went.
     */
     if (socket.rooms.has(gameID)) {
-      console.log(`Found room with key ${gameID}`)
+      console.log(`Found room with key ${gameID}`);
     }
-    socket.join(gameID)
-    socket.in(gameID).emit("playerJoinedRoom", gameID, name)
-    console.log(socket.rooms)
-    
-  })
+    socket.join(gameID);
+    socket.in(gameID).emit("playerJoinedRoom", gameID, name);
+    console.log(socket.rooms);
+  });
   /**
-   * Next one is easy, hostRoomFull. 
+   * Next one is easy, hostRoomFull.
    * socket.on('hostRoomFull') is called notifying the server that the host room is full,
    * and will block any other attempt from anyone else.
-   * ALternatively, this is a server-to-client emit, which is the server telling either 
+   * ALternatively, this is a server-to-client emit, which is the server telling either
    * the host, or everyone connected, that this room is full.
    */
   setInterval(() => io.emit("time", new Date().toTimeString()), 1000);
 });
 
 app.get("/", (_, res) => {
-  res.send(`Welcome to an Express server with websockets!`);
+  res.send(`Welcome to an Express server with websockets! port: ${port}`);
 });
 server.listen(port, (): void => {
   console.log(`Connected successfully on port ${port}`);
@@ -95,6 +94,6 @@ server.listen(port, (): void => {
 });
 
 type Data = {
-  gameID: string,
-  socketID: string
-}
+  gameID: string;
+  socketID: string;
+};
