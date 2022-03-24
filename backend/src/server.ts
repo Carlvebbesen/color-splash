@@ -87,7 +87,7 @@ io.on("connection", (socket) => {
 
 app.get("/", (_, res) => {
   res.send(
-    `Welcome to an Express server with websockets! port: ${port} kjøør da!!`
+    `Welcome to an Express server with websockets! port: ${port} kjøør fylla sfd!!`
   );
 });
 server.listen(port, (): void => {
