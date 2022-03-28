@@ -5,7 +5,9 @@ export interface ServerToClientEvents {
   basicEmit: (a: number, b: string, c: Buffer) => void;
   withAck: (d: string, callback: (e: number) => void) => void;
   newGameCreated: (object: any) => void;
-  playerJoinedRoom: (gameID: any, name: any) => void;
+  playerJoinedRoom: (gameID: any) => void;
+  allPlayers: () => void;
+  startGame: () => void;
 }
 
 export interface ClientToServerEvents {
@@ -18,6 +20,7 @@ export interface ClientToServerEvents {
   hostCountDownFinished: () => void;
   hostNextRound: () => void;
   hostGameOver: () => void;
+  hostStartGame : () => void;
 }
 
 export interface InterServerEvents {
