@@ -6,6 +6,13 @@ import { initGame } from "./game/setup";
 //import { hostCreateNewGame } from "./events/host_events";
 import * as eventTypes from "./types/eventTypes";
 
+let lastCommitToMaster = "";
+require("child_process").exec(
+  "git rev-parse HEAD",
+  function (_: Error, stdout: string) {
+    lastCommitToMaster = stdout;
+  }
+);
 const app: express.Application = express();
 const port = process.env.PORT || 8000;
 const server: http.Server = http.createServer(app);
@@ -46,7 +53,7 @@ initGame()
    */
 app.get("/", (_, res) => {
   res.send(
-    `Welcome to an Express server with websockets! port: ${port} kjøør fylla på dt!`
+    `Welcome to an Express server with websockets! port: ${port} \n LastCommit hash to branch master: ${lastCommitToMaster}`
   );
 });
 server.listen(port, (): void => {
