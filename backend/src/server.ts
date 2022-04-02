@@ -3,12 +3,24 @@ import * as http from "http";
 import * as socket from "socket.io";
 import disconnectEvent from "./events/disconnectEvent";
 import { hostCreateGameEvent } from "./events/hostCreateGameEvent";
-import { disconnect, hostCreateGame, joinGame } from "./globalEvents";
+import {
+  colorsDisplayedFinished,
+  disconnect,
+  hostCreateGame,
+  joinGame,
+  startGame,
+} from "./globalEvents";
 import { InterServerEvents } from "./types/interServerTypes";
 import { ServerToClientEvents } from "./types/serverToClientTypes";
 import { ClientToServerEvents } from "./types/clientToServerTypes";
 import { joinGameEvent } from "./events/joinGameEvent";
-import { createGame, playerJoinGame } from "./types/socketDataTypes";
+import {
+  createGameData,
+  gameIdNickname,
+  onlyGameId,
+} from "./types/socketDataTypes";
+import { startGameEvent } from "./events/startGameEvent";
+import { colorsDisplayedFinishedEvent } from "./events/colorsDisplayedFinishedEvent";
 
 let lastCommitToMaster = "";
 require("child_process").exec(
@@ -30,17 +42,20 @@ export const io = new socket.Server<
   },
 });
 //setup the start connection
-//add events here when the are made in the backend
+//add events here when they are made in the backend
 io.on("connection", (socket: socket.Socket) => {
   socket.on(disconnect, () => disconnectEvent(socket, io));
-  socket.on(hostCreateGame, (data: createGame) =>
+  socket.on(hostCreateGame, (data: createGameData) =>
     hostCreateGameEvent(socket, io, data)
   );
-  socket.on(joinGame, (data: playerJoinGame) =>
+  socket.on(joinGame, (data: gameIdNickname) =>
     joinGameEvent(socket, io, data)
   );
+  socket.on(startGame, (data: onlyGameId) => startGameEvent(socket, io, data));
+  socket.on(colorsDisplayedFinished, (data: onlyGameId) =>
+    colorsDisplayedFinishedEvent(socket, io, data)
+  );
 });
-
 
 app.get("/", (_, res) => {
   res.send(

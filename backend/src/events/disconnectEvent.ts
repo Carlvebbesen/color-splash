@@ -1,9 +1,13 @@
 import { Server, Socket } from "socket.io";
-import { playerDisconnected } from "../gameState";
+import { gameDeleted } from "../globalEvents";
+import { playerDisconnected } from "../serverState";
 
 const disconnectEvent = (socket: Socket, io: Server) => {
   console.log(`a user disconnected with, socketid:${socket.id}`);
-  playerDisconnected(socket.id);
+  const result = playerDisconnected(socket.id);
+  if (result != 0) {
+    io.in(result.toString()).emit(gameDeleted, { gameId: result });
+  }
 };
 
 export default disconnectEvent;
