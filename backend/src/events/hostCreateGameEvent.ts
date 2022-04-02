@@ -1,13 +1,14 @@
 import { Server, Socket } from "socket.io";
 import { game, player } from "../types/internalTypes";
-import { addGame, getGame } from "../gameState";
+import { addGame, getGame } from "../serverState";
 import { error, gameCreated } from "../globalEvents";
-import { createGame } from "../types/socketDataTypes";
+import { createGameData } from "../types/socketDataTypes";
+import { getTimeForEachRound } from "./utils";
 
 export const hostCreateGameEvent = (
   socket: Socket,
   io: Server,
-  data: createGame
+  data: createGameData
 ) => {
   if (socket.rooms.size > 1) {
     socket.emit(
@@ -25,20 +26,20 @@ export const hostCreateGameEvent = (
     socketId: socket.id,
     gameId: gameId,
     roundsPlayed: [],
-    totalScore: 0,
   };
   const newGame: game = {
     gameId: gameId,
     hostId: host.socketId,
     maxRound: data.rounds ?? 4,
     maxPlayers: data.maxPlayers ?? 4,
-    currentRound: 0,
     difficulty: data.difficulty ?? "easy",
-    players: [host],
+    players: [host.socketId],
+    rounds: [],
+    result: [],
+    timeEachRound: getTimeForEachRound(data.difficulty),
   };
   addGame(newGame);
   socket.emit(gameCreated, newGame);
   socket.join(gameId.toString());
-  console.log(socket.rooms);
   console.log(`Dette er id til det nylig skapte game-room ${gameId}`);
 };

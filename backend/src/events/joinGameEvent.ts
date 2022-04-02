@@ -1,15 +1,15 @@
 import { Server, Socket } from "socket.io";
+import { gameIdNickname } from "../types/socketDataTypes";
 import { error, gameInfo } from "../globalEvents";
-import { addPlayer, getGame } from "../gameState";
+import { addPlayer, getGame, getPlayersFromGame } from "../serverState";
 import { player } from "../types/internalTypes";
-import { playerJoinGame } from "../types/socketDataTypes";
 
 export const joinGameEvent = (
   socket: Socket,
   io: Server,
-  newPlayer: playerJoinGame
+  data: gameIdNickname
 ) => {
-  const game = getGame(newPlayer.gameId);
+  const game = getGame(data.gameId);
   if (game === null) {
     socket.emit(error, "Game does not exist");
     return;
@@ -18,6 +18,9 @@ export const joinGameEvent = (
     socket.emit(error, "Game is full");
     return;
   }
+  if (game.rounds.length > 0) {
+    socket.emit(error, "Game is already started");
+  }
   if (socket.rooms.size > 1) {
     socket.emit(
       error,
@@ -25,11 +28,10 @@ export const joinGameEvent = (
     );
   }
   const player: player = {
-    name: newPlayer.nickname ?? "player",
+    name: data.nickname ?? "player",
     socketId: socket.id,
     gameId: game.gameId,
     roundsPlayed: [],
-    totalScore: 0,
   };
   addPlayer(game.gameId, player);
   socket.join(game.gameId.toString());
@@ -37,7 +39,7 @@ export const joinGameEvent = (
     playerCount: game.players.length,
     gameId: game.gameId,
     host: game.hostId,
-    nickNames: game.players.map((player) => player.name),
+    nickNames: getPlayersFromGame(game.gameId),
   });
   console.log(`player ${player.name} joined game ${game.gameId}`);
 };

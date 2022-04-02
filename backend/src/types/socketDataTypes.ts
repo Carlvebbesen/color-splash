@@ -1,11 +1,14 @@
-export interface createGame {
+export interface createGameData {
   rounds: number;
   nickname: string;
   difficulty: string;
   maxPlayers: number;
 }
 
-export interface playerJoinGame {
+export interface gameIdNickname {
   nickname: string;
+  gameId: number;
+}
+export interface onlyGameId {
   gameId: number;
 }
