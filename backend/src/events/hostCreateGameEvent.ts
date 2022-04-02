@@ -1,6 +1,6 @@
 import { Server, Socket } from "socket.io";
 import { game, player } from "../types/internalTypes";
-import { addGame, getGame } from "../serverState";
+import { addGame, addPlayer, getGame } from "../serverState";
 import { error, gameCreated } from "../globalEvents";
 import { createGameData } from "../types/socketDataTypes";
 import { getTimeForEachRound } from "./utils";
@@ -39,8 +39,9 @@ export const hostCreateGameEvent = (
     timeEachRound: getTimeForEachRound(data.difficulty),
   };
   addGame(newGame);
+  addPlayer(newGame.gameId, host);
   socket.emit(gameCreated, newGame);
   socket.join(gameId.toString());
   console.log(`Dette er id til det nylig skapte game-room ${gameId}`);
-  console.log(`Laget av spilleren: ${host}`);
+  console.log(`Laget av spilleren: ${host.name}`);
 };
