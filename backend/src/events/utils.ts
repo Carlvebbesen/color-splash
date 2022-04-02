@@ -1,4 +1,4 @@
-const generateColors = (difficulty: string): string[] => {
+export const generateColors = (difficulty: string): string[] => {
   switch (difficulty) {
     case "medium":
       return getColors(6);
