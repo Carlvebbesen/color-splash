@@ -12,10 +12,10 @@ export const getGame = (gameId: number): game | null => {
   return gameData.games.find((game) => game.gameId === gameId) ?? null;
 };
 export const deleteGame = (gameId: number) => {
-  const index = gameData.games.indexOf(getGame(gameId) ?? null);
-  if (index > -1) {
-    gameData.games[index].players.forEach((playerId) => deletePlayer(playerId));
-    gameData.games.splice(index, 1);
+  const game = getGame(gameId);
+  if (game) {
+    gameData.games = gameData.games.filter((game) => game.gameId !== gameId);
+    game.players.forEach((playerId) => deletePlayer(playerId));
   }
 };
 export const addPlayer = (gameId: number, newPlayer: player): void => {
@@ -48,8 +48,7 @@ export const deletePlayer = (playerId: string): boolean => {
   const game = getGame(getPlayer(playerId).gameId);
   if (index > -1) {
     playerData.players.splice(index, 1);
-    const playerIdIndex = game.players.indexOf(playerId);
-    game.players.splice(playerIdIndex, 1);
+    game.players = game.players.filter((player) => player !== playerId);
     return game.hostId == playerId;
   }
 };
