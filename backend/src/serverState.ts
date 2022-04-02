@@ -49,7 +49,7 @@ export const deletePlayer = (playerId: string): boolean => {
   if (index > -1) {
     playerData.players.splice(index, 1);
     const playerIdIndex = game.players.indexOf(playerId);
-    playerData.players.splice(playerIdIndex, 1);
+    game.players.splice(playerIdIndex, 1);
     return game.hostId == playerId;
   }
 };
