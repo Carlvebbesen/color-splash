@@ -33,7 +33,7 @@ export const hostCreateGameEvent = (
     maxRound: data.rounds ?? 4,
     maxPlayers: data.maxPlayers ?? 4,
     difficulty: data.difficulty ?? "easy",
-    players: [host.socketId],
+    players: [socket.id],
     rounds: [],
     result: [],
     timeEachRound: getTimeForEachRound(data.difficulty),
@@ -42,4 +42,5 @@ export const hostCreateGameEvent = (
   socket.emit(gameCreated, newGame);
   socket.join(gameId.toString());
   console.log(`Dette er id til det nylig skapte game-room ${gameId}`);
+  console.log(`Laget av spilleren: ${host}`);
 };

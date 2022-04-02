@@ -54,6 +54,11 @@ export const deletePlayer = (playerId: string): boolean => {
 };
 
 export const getPlayersFromGame = (gameId: number): player[] => {
-  return getGame(gameId)?.players.map((playerId) => getPlayer(playerId)) ?? [];
+  console.log(getGame(gameId));
+  return (
+    getGame(gameId)
+      ?.players.map((playerId) => getPlayer(playerId))
+      .filter((player) => player !== null) ?? []
+  );
 };
 //returns boolean true if the player was the host
