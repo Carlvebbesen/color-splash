@@ -39,8 +39,8 @@ export const playerDisconnected = (socketId: string): number => {
       deleteGame(player.gameId);
       return player.gameId;
     }
-    return 0;
   }
+  return 0;
 };
 export const deletePlayer = (playerId: string): boolean => {
   //returns boolean true if the player was the host
