@@ -2,7 +2,7 @@ import { Server, Socket } from "socket.io";
 import { getGame } from "../serverState";
 import { displayColors, error } from "../globalEvents";
 import { onlyGameId } from "../types/socketDataTypes";
-import { generateColors } from "./utils";
+import { generateColors } from "../utils";
 
 export const startGameEvent = (
   socket: Socket,

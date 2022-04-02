@@ -3,7 +3,7 @@ import { game, player } from "../types/internalTypes";
 import { addGame, addPlayer, getGame } from "../serverState";
 import { error, gameCreated } from "../globalEvents";
 import { createGameData } from "../types/socketDataTypes";
-import { getTimeForEachRound } from "./utils";
+import { getTimeForEachRound } from "../utils";
 
 export const hostCreateGameEvent = (
   socket: Socket,
