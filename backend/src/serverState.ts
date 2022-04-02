@@ -1,3 +1,5 @@
+import { Socket } from "socket.io";
+import { io } from "./server";
 import { game, gameState, player, playerState } from "./types/internalTypes";
 const gameData: gameState = {
   games: [],
@@ -29,12 +31,12 @@ export const getPlayer = (playerId: string): player | null => {
     playerData.players.find((player) => player.socketId === playerId) ?? null
   );
 };
-export const playerDisconnected = (socketId: string): number => {
+export const playerDisconnected = async (socketId: string): Promise<number> => {
   const player = playerData.players.find(
     (player) => player.socketId === socketId
   );
   if (player) {
-    const isHost = deletePlayer(socketId);
+    const isHost = await deletePlayer(socketId);
     if (isHost || getGame(player.gameId).players.length === 0) {
       deleteGame(player.gameId);
       return player.gameId;
@@ -42,13 +44,18 @@ export const playerDisconnected = (socketId: string): number => {
   }
   return 0;
 };
-export const deletePlayer = (playerId: string): boolean => {
+export const deletePlayer = async (playerId: string): Promise<boolean> => {
   //returns boolean true if the player was the host
   const index = playerData.players.indexOf(getPlayer(playerId) ?? null);
   const game = getGame(getPlayer(playerId).gameId);
   if (index > -1) {
     playerData.players.splice(index, 1);
     game.players = game.players.filter((player) => player !== playerId);
+    (await io.fetchSockets()).forEach((socket) => {
+      if (socket.id === playerId) {
+        socket.leave(game.gameId.toString());
+      }
+    });
     return game.hostId == playerId;
   }
 };
@@ -61,4 +68,3 @@ export const getPlayersFromGame = (gameId: number): player[] => {
       .filter((player) => player !== null) ?? []
   );
 };
-//returns boolean true if the player was the host
