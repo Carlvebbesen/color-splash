@@ -1,10 +1,26 @@
 import * as express from "express";
 import * as http from "http";
 import * as socket from "socket.io";
-import * as disconnect from "./events/disconnect";
-import { initGame } from "./game/setup";
-//import { hostCreateNewGame } from "./events/host_events";
-import * as eventTypes from "./types/eventTypes";
+import disconnectEvent from "./events/disconnectEvent";
+import { hostCreateGameEvent } from "./events/hostCreateGameEvent";
+import {
+  colorsDisplayedFinished,
+  disconnect,
+  hostCreateGame,
+  joinGame,
+  startGame,
+} from "./globalEvents";
+import { InterServerEvents } from "./types/interServerTypes";
+import { ServerToClientEvents } from "./types/serverToClientTypes";
+import { ClientToServerEvents } from "./types/clientToServerTypes";
+import { joinGameEvent } from "./events/joinGameEvent";
+import {
+  createGameData,
+  gameIdNickname,
+  onlyGameId,
+} from "./types/socketDataTypes";
+import { startGameEvent } from "./events/startGameEvent";
+import { colorsDisplayedFinishedEvent } from "./events/colorsDisplayedFinishedEvent";
 
 let lastCommitToMaster = "";
 require("child_process").exec(
@@ -17,46 +33,35 @@ const app: express.Application = express();
 const port = process.env.PORT || 8000;
 const server: http.Server = http.createServer(app);
 export const io = new socket.Server<
-  eventTypes.ClientToServerEvents,
-  eventTypes.ServerToClientEvents,
-  eventTypes.InterServerEvents,
-  eventTypes.SocketData
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents
 >(server, {
   cors: {
     origin: "*",
   },
 });
+//setup the start connection
+//add events here when they are made in the backend
+io.on("connection", (socket: socket.Socket) => {
+  socket.on(disconnect, () => disconnectEvent(socket, io));
+  socket.on(hostCreateGame, (data: createGameData) =>
+    hostCreateGameEvent(socket, io, data)
+  );
+  socket.on(joinGame, (data: gameIdNickname) =>
+    joinGameEvent(socket, io, data)
+  );
+  socket.on(startGame, (data: onlyGameId) => startGameEvent(socket, io, data));
+  socket.on(colorsDisplayedFinished, (data: onlyGameId) =>
+    colorsDisplayedFinishedEvent(socket, io, data)
+  );
+});
 
-
-/**
- * Workflow tips and tricks
- * When in doubt, use any;)
- * Dividing shit up into files and modules is nonessential at first,
- * implement methods closest to the shit you`re working with,
- * and after a while, whenever it is possible, abstract away into
- * modules with functions.
- * console log every fucking thing, especially when things become undefined
- * Remember, most guides are for implementing a single room, when we
- * have to use multiple game rooms;) although the simplest thing is to
- * follow a guide for one room, and when that works, simply scale up by
- * adding an array of rooms and loop through with a for-each loop
- *
- * KEY reading - learn how to pass objects as arguments in a socket.io request!!
- */
-initGame()
-  /**
-   * Next one is easy, hostRoomFull.
-   * socket.on('hostRoomFull') is called notifying the server that the host room is full,
-   * and will block any other attempt from anyone else.
-   * ALternatively, this is a server-to-client emit, which is the server telling either
-   * the host, or everyone connected, that this room is full.
-   */
 app.get("/", (_, res) => {
   res.send(
-    `Welcome to an Express server with websockets! port: ${port} \n LastCommit hash to branch master: ${lastCommitToMaster}`
+    `Welcome to an Express server with websockets! port: ${port}. PlayerCount: ${io.engine.clientsCount}. Last commit to master: ${lastCommitToMaster}`
   );
 });
 server.listen(port, (): void => {
   console.log(`Connected successfully on port ${port}`);
-  console.log(io.listenerCount("connection"));
 });
