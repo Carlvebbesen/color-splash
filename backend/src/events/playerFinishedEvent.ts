@@ -10,7 +10,6 @@ import { player, playerRound, result } from "../types/internalTypes";
  * The correct answer sequence is retrieved by matching roundNumber from 
  * incoming roundData and the game`s roundArray. Then, playerscore is
  * calculated using utility method calculateScore.
- * Players round
  * @param socket - playerID for this player 
  * @param roundData - all relevant data for this round, most important being answers
  * 
