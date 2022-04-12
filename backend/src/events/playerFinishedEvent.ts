@@ -41,6 +41,7 @@ export const playerFinishedEvent = (socket: Socket, roundData: playerRound) => {
     //Things that need to be updated
     //add a new played round for that particular player
     //score from this round is added to score from previous rounds
+    console.log(player);
     const playedRound = {...roundData, score: roundData.score + playerScore};
     player = {...player, roundsPlayed: [...player.roundsPlayed, playedRound]}
     const updated = updatePlayer(player)
@@ -63,7 +64,9 @@ export const playerFinishedEvent = (socket: Socket, roundData: playerRound) => {
     }
     //Emits score for this particular round back to player (socketID)
     socket.emit(roundScore, {playerScore})
-    
+    console.log(player)
+    console.log(game)
+
 };
 
 

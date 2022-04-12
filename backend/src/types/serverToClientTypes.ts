@@ -8,4 +8,5 @@ export interface ServerToClientEvents {
   allPlayers: () => void;
   startGame: () => void;
   roundScore: (score: number) => void;
+  gameCreated: (game: any) => void;
 }

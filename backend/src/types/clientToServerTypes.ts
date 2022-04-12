@@ -8,4 +8,5 @@ export interface ClientToServerEvents {
   hostNextRound: () => void;
   hostGameOver: () => void;
   hostStartGame: () => void;
+  PlayerFinished: (data: any) => void;
 }
