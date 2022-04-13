@@ -8,6 +8,7 @@ import {
   disconnect,
   hostCreateGame,
   joinGame,
+  playerFinished,
   startGame,
 } from "./globalEvents";
 import { InterServerEvents } from "./types/interServerTypes";
@@ -21,6 +22,8 @@ import {
 } from "./types/socketDataTypes";
 import { startGameEvent } from "./events/startGameEvent";
 import { colorsDisplayedFinishedEvent } from "./events/colorsDisplayedFinishedEvent";
+import { playerRound } from "./types/internalTypes";
+import { playerFinishedEvent } from "./events/playerFinishedEvent";
 
 let lastCommitToMaster = "";
 require("child_process").exec(
@@ -55,6 +58,7 @@ io.on("connection", (socket: socket.Socket) => {
   socket.on(colorsDisplayedFinished, (data: onlyGameId) =>
     colorsDisplayedFinishedEvent(socket, io, data)
   );
+  socket.on(playerFinished, (data: playerRound) => playerFinishedEvent(socket, data));  
 });
 
 app.get("/", (_, res) => {

@@ -13,6 +13,16 @@ export const addGame = (newGame: game): void => {
 export const getGame = (gameId: number): game | null => {
   return gameData.games.find((game) => game.gameId === gameId) ?? null;
 };
+
+export const updateGame = (game: game): boolean => {
+  const oldGame: game = getGame(game.gameId);
+  if (!oldGame) return false;
+  gameData.games.map(g => 
+    oldGame.gameId === g.gameId ? {...g, game} : g
+  )
+  return true;
+}
+
 export const deleteGame = (gameId: number) => {
   const game = getGame(gameId);
   if (game) {
@@ -26,6 +36,17 @@ export const addPlayer = (gameId: number, newPlayer: player): void => {
     .find((game) => game.gameId === gameId)
     ?.players.push(newPlayer.socketId);
 };
+
+export const updatePlayer = (updatedPlayer: player): boolean => {
+  //updates a player with a 
+  const old: player = getPlayer(updatedPlayer.socketId);
+  if (!old) return false;
+  playerData.players.map(player => 
+    updatedPlayer.socketId === player.socketId ? {...player, updatedPlayer} : player
+  )
+  return true;
+}
+
 export const getPlayer = (playerId: string): player | null => {
   return (
     playerData.players.find((player) => player.socketId === playerId) ?? null
