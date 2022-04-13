@@ -15,8 +15,6 @@ export const gameFinishedEvent = (socket: Socket, io: Server,  gameId: number) =
     if (!game) {socket.emit(error, "game could not be found")}
     //Sends result array to everyone in room
     io.in(gameId.toString()).emit(gameFinished, game.result)
-    //Makes sure to delete game from gamestate
-    deleteGame(gameId)
     //TODO something with player array or answers?
     //Could also emit to every player their answers
 };
