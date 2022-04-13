@@ -16,7 +16,7 @@ const getColors = (count: number) => {
       possibleColors[Math.floor(Math.random() * possibleColors.length)]
     );
   }
-  return colors;
+  return possibleColors;
 };
 
 export const getTimeForEachRound = (difficulty: string): number => {
@@ -29,3 +29,23 @@ export const getTimeForEachRound = (difficulty: string): number => {
       return 10;
   }
 };
+
+export const calculateScore = (answers: string[], correctSequence: string[], timeUsed: number, 
+                              maxTime: number) => {
+  //Calculating score.
+  //For each correct color guessed, add 50 to score.
+  //Then, multiply score by difference between maxTime and timeUsed multiplied by 10
+  let score: number = 0;
+  console.log(answers)
+  console.log(correctSequence)
+  if (answers.length !== correctSequence.length) {
+    return -1;
+  }
+  correctSequence.forEach((color, index) => {
+    score += color === answers[index] ? 50 : 0;
+  })
+  const difficultyMultiplier = 1 / maxTime;
+  const scoreScaledWithDifficulty: number = (maxTime - timeUsed) * difficultyMultiplier;
+  const scaledScore = scoreScaledWithDifficulty * 100;
+  return scaledScore;
+}

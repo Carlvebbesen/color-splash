@@ -7,4 +7,6 @@ export interface ServerToClientEvents {
   playerJoinedRoom: (gameID: any) => void;
   allPlayers: () => void;
   startGame: () => void;
+  roundScore: (score: number) => void;
+  gameCreated: (game: any) => void;
 }

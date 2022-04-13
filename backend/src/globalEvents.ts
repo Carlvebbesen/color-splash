@@ -15,3 +15,4 @@ export const gameFinished = "GameFinished";
 export const endGame = "EndGame";
 export const gameDeleted = "GameDeleted";
 export const disconnect = "disconnect";
+export const roundScore = "RoundScore";
