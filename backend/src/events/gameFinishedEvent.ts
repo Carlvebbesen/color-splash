@@ -4,8 +4,9 @@ import { deleteGame, getGame } from "../serverState";
 import { game } from "../types/internalTypes";
 
 /**
+ * When NextRound sees that all rounds have been played, this method
+ * is called, and a result page should trigger in frontend.
  * Server emits results to everyone in game based on gameId.
- * Deletes game from gamestate.
  * @param socket - socketId
  * @param - gameId of game that results is to be displayed
  */

@@ -7,7 +7,10 @@ import { game } from "../types/internalTypes";
 
 /**
  * Host sends game finished to server.
- * Backend checks that games hostId matches with socketId
+ * Backend checks that games hostId matches with socketId.
+ * Then emits to everyone the endgame event, which frontend listens to
+ * and sends every client (including host) back to start page and deletes 
+ * game corresponding to that id.
  * @param socket - socketId of host
  * @param gameId - id of game that is to be finished
  */
