@@ -8,13 +8,12 @@
       "moduleResolution": "node",
       "sourceMap": true,
       "outDir": "dist",
-      "baseUrl": "./src",
+      "baseUrl": ".",
 
       "paths": {
           "*": [
               "node_modules/",
               "src",
-              "../"
           ]
       }
   },
