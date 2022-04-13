@@ -1,7 +1,7 @@
-import { endGame } from "globalEvents";
-import { error } from "globalEvents";
-import { deleteGame } from "serverState";
-import { getGame } from "serverState";
+import { endGame } from "../globalEvents";
+import { error } from "../globalEvents";
+import { deleteGame } from "../serverState";
+import { getGame } from "../serverState";
 import { Server, Socket } from "socket.io";
 import { game } from "../types/internalTypes";
 
