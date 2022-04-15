@@ -11,6 +11,7 @@ const joinGameEvent_1 = require("./events/joinGameEvent");
 const startGameEvent_1 = require("./events/startGameEvent");
 const colorsDisplayedFinishedEvent_1 = require("./events/colorsDisplayedFinishedEvent");
 const playerFinishedEvent_1 = require("./events/playerFinishedEvent");
+const serverState_1 = require("./serverState");
 let lastCommitToMaster = "";
 require("child_process").exec("git rev-parse HEAD", function (_, stdout) {
     lastCommitToMaster = stdout;
@@ -34,7 +35,19 @@ exports.io.on("connection", (socket) => {
     socket.on(globalEvents_1.playerFinished, (data) => (0, playerFinishedEvent_1.playerFinishedEvent)(socket, data));
 });
 app.get("/", (_, res) => {
-    res.send(`Welcome to an Express server with websockets! port: ${port}. PlayerCount: ${exports.io.engine.clientsCount}. Last commit to master: ${lastCommitToMaster}`);
+    const gameStateString = (0, serverState_1.getGameStateAsString)();
+    res.send(`<html lang="no">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <!-- Your HTML here -->
+    <p>Welcome to an Express server with websockets! port: ${port}. PlayerCount: ${exports.io.engine.clientsCount}. Last commit to master: ${lastCommitToMaster}</p>
+    <br/>
+    ${gameStateString} <br/>
+      </body>
+</html>
+    `);
 });
 server.listen(port, () => {
     console.log(`Connected successfully on port ${port}`);

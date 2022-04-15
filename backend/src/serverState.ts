@@ -1,4 +1,3 @@
-import { Socket } from "socket.io";
 import { io } from "./server";
 import { game, gameState, player, playerState } from "./types/internalTypes";
 const gameData: gameState = {
@@ -17,11 +16,9 @@ export const getGame = (gameId: number): game | null => {
 export const updateGame = (game: game): boolean => {
   const oldGame: game = getGame(game.gameId);
   if (!oldGame) return false;
-  gameData.games.map(g => 
-    oldGame.gameId === g.gameId ? {...g, game} : g
-  )
+  gameData.games.map((g) => (oldGame.gameId === g.gameId ? { ...g, game } : g));
   return true;
-}
+};
 
 export const deleteGame = (gameId: number) => {
   const game = getGame(gameId);
@@ -38,14 +35,16 @@ export const addPlayer = (gameId: number, newPlayer: player): void => {
 };
 
 export const updatePlayer = (updatedPlayer: player): boolean => {
-  //updates a player with a 
+  //updates a player with a
   const old: player = getPlayer(updatedPlayer.socketId);
   if (!old) return false;
-  playerData.players.map(player => 
-    updatedPlayer.socketId === player.socketId ? {...player, updatedPlayer} : player
-  )
+  playerData.players.map((player) =>
+    updatedPlayer.socketId === player.socketId
+      ? { ...player, updatedPlayer }
+      : player
+  );
   return true;
-}
+};
 
 export const getPlayer = (playerId: string): player | null => {
   return (
@@ -88,4 +87,28 @@ export const getPlayersFromGame = (gameId: number): player[] => {
       ?.players.map((playerId) => getPlayer(playerId))
       .filter((player) => player !== null) ?? []
   );
+};
+
+export const getPlayerStateHTML = (): HTMLUListElement => {
+  const playerList = document.createElement("ul");
+  playerData.players.forEach((player) => {
+    const playerItem = document.createElement("li");
+    playerItem.innerHTML = `${player.name} is in game ${player.gameId} and have played: ${player.roundsPlayed}`;
+    playerList.appendChild(playerItem);
+  });
+  return playerList;
+};
+export const getGameStateAsString = (): string => {
+  let GameStateString = "Current GameState: \n";
+  gameData.games.forEach((game) => {
+    GameStateString += `Game ${game.gameId} with ${game.rounds.length} rounds played and ${game.difficulty} difficulty, And Players: `;
+    game.players.forEach((playerId) => {
+      const player = getPlayer(playerId);
+      if (player) {
+        GameStateString += `name: ${player.name} and rounds played: ${player.roundsPlayed.length} \n`;
+      }
+    });
+    GameStateString += "\n";
+  });
+  return GameStateString;
 };

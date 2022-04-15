@@ -24,6 +24,7 @@ import { startGameEvent } from "./events/startGameEvent";
 import { colorsDisplayedFinishedEvent } from "./events/colorsDisplayedFinishedEvent";
 import { playerRound } from "./types/internalTypes";
 import { playerFinishedEvent } from "./events/playerFinishedEvent";
+import { getGameStateAsString, getPlayerStateHTML } from "./serverState";
 
 let lastCommitToMaster = "";
 require("child_process").exec(
@@ -58,12 +59,25 @@ io.on("connection", (socket: socket.Socket) => {
   socket.on(colorsDisplayedFinished, (data: onlyGameId) =>
     colorsDisplayedFinishedEvent(socket, io, data)
   );
-  socket.on(playerFinished, (data: playerRound) => playerFinishedEvent(socket, data));  
+  socket.on(playerFinished, (data: playerRound) =>
+    playerFinishedEvent(socket, data)
+  );
 });
-
 app.get("/", (_, res) => {
+  const gameStateString = getGameStateAsString();
   res.send(
-    `Welcome to an Express server with websockets! port: ${port}. PlayerCount: ${io.engine.clientsCount}. Last commit to master: ${lastCommitToMaster}`
+    `<html lang="no">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <!-- Your HTML here -->
+    <p>Welcome to an Express server with websockets! port: ${port}. PlayerCount: ${io.engine.clientsCount}. Last commit to master: ${lastCommitToMaster}</p>
+    <br/>
+    ${gameStateString} <br/>
+      </body>
+</html>
+    `
   );
 });
 server.listen(port, (): void => {
