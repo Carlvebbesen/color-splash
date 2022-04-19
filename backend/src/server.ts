@@ -26,13 +26,6 @@ import { playerRound } from "./types/internalTypes";
 import { playerFinishedEvent } from "./events/playerFinishedEvent";
 import { getGameStateAsString, getPlayerStateHTML } from "./serverState";
 
-let lastCommitToMaster = "";
-require("child_process").exec(
-  "git rev-parse HEAD",
-  function (_: Error, stdout: string) {
-    lastCommitToMaster = stdout;
-  }
-);
 const app: express.Application = express();
 const port = process.env.PORT || 8000;
 const server: http.Server = http.createServer(app);
@@ -72,7 +65,7 @@ app.get("/", (_, res) => {
   </head>
   <body>
     <!-- Your HTML here -->
-    <p>Welcome to an Express server with websockets! port: ${port}. PlayerCount: ${io.engine.clientsCount}. Last commit to master: ${lastCommitToMaster}</p>
+    <p>Welcome to an Express server with websockets! port: ${port}. PlayerCount: ${io.engine.clientsCount}.</p>
     <br/>
     ${gameStateString} <br/>
       </body>
