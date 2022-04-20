@@ -40,15 +40,12 @@ export const calculateScore = (
   let score: number = 0;
   console.log(answers);
   console.log(correctSequence);
-  if (answers.length !== correctSequence.length) {
-    return -1;
-  }
+
   correctSequence.forEach((color, index) => {
-    score += color === answers[index] ? 50 : 0;
+    if(answers.length>index){
+      score += color === answers[index] ? 50 : 0;
+    }
   });
-  const difficultyMultiplier = 1 / maxTime;
-  const scoreScaledWithDifficulty: number =
-    (maxTime - timeUsed) * difficultyMultiplier;
-  const scaledScore = scoreScaledWithDifficulty * 100;
-  return scaledScore;
+  score *= (maxTime - timeUsed) / 10;
+  return score;
 };
