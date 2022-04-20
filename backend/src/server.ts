@@ -6,6 +6,8 @@ import { hostCreateGameEvent } from "./events/hostCreateGameEvent";
 import {
   colorsDisplayedFinished,
   disconnect,
+  endRound,
+  getEndRoundResult,
   hostCreateGame,
   joinGame,
   playerFinished,
@@ -19,12 +21,15 @@ import {
   createGameData,
   gameIdNickname,
   onlyGameId,
+  playerAnswerGameId,
 } from "./types/socketDataTypes";
 import { startGameEvent } from "./events/startGameEvent";
 import { colorsDisplayedFinishedEvent } from "./events/colorsDisplayedFinishedEvent";
 import { playerRound } from "./types/internalTypes";
 import { playerFinishedEvent } from "./events/playerFinishedEvent";
-import { getGameStateAsString, getPlayerStateHTML } from "./serverState";
+import { getGameStateAsString } from "./serverState/gameState";
+import { getPlayerAsString } from "./serverState/playerState";
+import { getEndRoundResultEvent } from "./events/getEndRoundResultEvent";
 
 const app: express.Application = express();
 const port = process.env.PORT || 8000;
@@ -52,12 +57,16 @@ io.on("connection", (socket: socket.Socket) => {
   socket.on(colorsDisplayedFinished, (data: onlyGameId) =>
     colorsDisplayedFinishedEvent(socket, io, data)
   );
-  socket.on(playerFinished, (data: playerRound) =>
+  socket.on(playerFinished, (data: playerAnswerGameId) =>
     playerFinishedEvent(socket, data)
+  );
+  socket.on(getEndRoundResult, (data: onlyGameId) =>
+    getEndRoundResultEvent(socket, io, data)
   );
 });
 app.get("/", (_, res) => {
   const gameStateString = getGameStateAsString();
+  const playerStateString = getPlayerAsString();
   res.send(
     `<html lang="no">
   <head>
@@ -68,6 +77,8 @@ app.get("/", (_, res) => {
     <p>Welcome to an Express server with websockets! port: ${port}. PlayerCount: ${io.engine.clientsCount}.</p>
     <br/>
     ${gameStateString} <br/>
+    <br/>
+    ${playerStateString} <br/>
       </body>
 </html>
     `

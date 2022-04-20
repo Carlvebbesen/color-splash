@@ -12,3 +12,7 @@ export interface gameIdNickname {
 export interface onlyGameId {
   gameId: number;
 }
+export interface playerAnswerGameId {
+  gameId: number;
+  answer: number[];
+}

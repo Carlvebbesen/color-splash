@@ -1,8 +1,12 @@
 import { Server, Socket } from "socket.io";
 import { gameIdNickname } from "../types/socketDataTypes";
 import { error, gameInfo } from "../globalEvents";
-import { addPlayer, getGame, getPlayersFromGame } from "../serverState";
+import { getGame } from "../serverState/gameState";
 import { player } from "../types/internalTypes";
+import {
+  addPlayerToServerAndGame,
+  getPlayersFromGame,
+} from "../serverState/playerState";
 
 export const joinGameEvent = (
   socket: Socket,
@@ -26,6 +30,7 @@ export const joinGameEvent = (
       error,
       "You are already in a game. Please leave the current game first."
     );
+    return;
   }
   const player: player = {
     name: data.nickname ?? "player",
@@ -33,7 +38,7 @@ export const joinGameEvent = (
     gameId: game.gameId,
     roundsPlayed: [],
   };
-  addPlayer(game.gameId, player);
+  addPlayerToServerAndGame(game.gameId, player);
   socket.join(game.gameId.toString());
   io.in(game.gameId.toString()).emit(gameInfo, {
     playerCount: game.players.length,

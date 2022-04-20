@@ -1,5 +1,5 @@
 import { Server, Socket } from "socket.io";
-import { getGame } from "../serverState";
+import { getGame } from "../serverState/gameState";
 import { displayColors, error } from "../globalEvents";
 import { onlyGameId } from "../types/socketDataTypes";
 import { generateColors } from "../utils";
@@ -31,6 +31,7 @@ export const startGameEvent = (
     round: game.rounds.length + 1,
     gameId: data.gameId,
     colors: roundColors,
+    roundStarted: null,
   });
   io.in(game.gameId.toString()).emit(displayColors, {
     gameId: game.gameId,
