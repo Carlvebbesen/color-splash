@@ -1,6 +1,6 @@
 import { Server, Socket } from "socket.io";
 import { gameDeleted } from "../globalEvents";
-import { playerDisconnected } from "../serverState";
+import { playerDisconnected } from "../serverState/playerState";
 
 const disconnectEvent = async (socket: Socket, io: Server) => {
   console.log(`a user disconnected with, socketid:${socket.id}`);

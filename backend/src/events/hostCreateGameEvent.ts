@@ -1,9 +1,10 @@
 import { Server, Socket } from "socket.io";
 import { game, player } from "../types/internalTypes";
-import { addGame, addPlayer, getGame } from "../serverState";
+import { addGame, getGame } from "../serverState/gameState";
 import { error, gameCreated } from "../globalEvents";
 import { createGameData } from "../types/socketDataTypes";
-import { getTimeForEachRound } from "../utils";
+import { getTimeForEachRoundMs } from "../utils";
+import { addPlayerToServerAndGame } from "../serverState/playerState";
 
 export const hostCreateGameEvent = (
   socket: Socket,
@@ -21,7 +22,6 @@ export const hostCreateGameEvent = (
   while (getGame(gameId) != null) {
     gameId = (Math.random() * 100000) | 0;
   }
-  gameId = 10000; //CHANGE BACK
   const host: player = {
     name: data.nickname ?? "playerHost",
     socketId: socket.id,
@@ -34,14 +34,14 @@ export const hostCreateGameEvent = (
     maxRound: data.rounds ?? 4,
     maxPlayers: data.maxPlayers ?? 4,
     difficulty: data.difficulty ?? "easy",
-    players: [socket.id],
+    players: [],
     rounds: [],
     result: [],
-    timeEachRound: getTimeForEachRound(data.difficulty),
+    timeEachRound: getTimeForEachRoundMs(data.difficulty),
   };
   addGame(newGame);
-  //addPlayer(newGame.gameId, host);
-  console.log(newGame)
+  addPlayerToServerAndGame(newGame.gameId, host);
+  console.log(newGame);
   socket.emit(gameCreated, newGame);
   socket.join(gameId.toString());
   console.log(`Dette er id til det nylig skapte game-room ${gameId}`);

@@ -1,3 +1,5 @@
+import { Temporal } from "@js-temporal/polyfill";
+
 export interface gameState {
   games: game[];
 }
@@ -21,12 +23,12 @@ export interface player {
   name: string;
   socketId: string;
   gameId: number;
-  roundsPlayed: playerRound[] | [];
+  roundsPlayed: playerRound[];
 }
 
 export interface playerRound {
   round: number;
-  answer: string[];
+  answer: number[];
   timeUsed: number;
   playerId: string;
   gameId: number;
@@ -35,10 +37,11 @@ export interface playerRound {
 export interface colors {
   round: number;
   gameId: number;
-  colors: string[];
+  colors: number[];
+  roundStarted: Temporal.Instant | null;
 }
 export interface result {
   playerId: string;
   nickname: string;
-  score: number;
+  totalScore: number;
 }
