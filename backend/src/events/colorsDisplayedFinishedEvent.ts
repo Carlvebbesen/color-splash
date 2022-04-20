@@ -1,6 +1,6 @@
 import { Server, Socket } from "socket.io";
 import { error, roundStarted, timesUp } from "../globalEvents";
-import { deleteLastRound, getGame, setRoundStartedTime } from "../serverState/gameState";
+import { getGame, setRoundStartedTime } from "../serverState/gameState";
 import { onlyGameId } from "../types/socketDataTypes";
 
 export const colorsDisplayedFinishedEvent = (
@@ -20,7 +20,7 @@ export const colorsDisplayedFinishedEvent = (
       maxRound: game.maxRound,
       colors: game.rounds[game.rounds.length - 1],
     });
-    if(!setRoundStartedTime(game.gameId)){
+    if (!setRoundStartedTime(game.gameId)) {
       socket.emit(error, "could not set round started time");
       return;
     }
@@ -29,6 +29,7 @@ export const colorsDisplayedFinishedEvent = (
       () =>
         io.in(game.gameId.toString()).emit(timesUp, { gameId: data.gameId }),
       game.timeEachRound
+      //here we can add an emit to the client to tell them to show the endRound screen if alle players have submitted their colors
     );
   }
 };
