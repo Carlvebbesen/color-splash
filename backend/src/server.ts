@@ -6,10 +6,12 @@ import { hostCreateGameEvent } from "./events/hostCreateGameEvent";
 import {
   colorsDisplayedFinished,
   disconnect,
+  endGame,
   endRound,
   getEndRoundResult,
   hostCreateGame,
   joinGame,
+  nextRound,
   playerFinished,
   startGame,
 } from "./globalEvents";
@@ -30,6 +32,8 @@ import { playerFinishedEvent } from "./events/playerFinishedEvent";
 import { getGameStateAsString } from "./serverState/gameState";
 import { getPlayerAsString } from "./serverState/playerState";
 import { getEndRoundResultEvent } from "./events/getEndRoundResultEvent";
+import { nextRoundEvent } from "./events/nextRoundEvent";
+import { endGameEvent } from "./events/endGameEvent";
 
 const app: express.Application = express();
 const port = process.env.PORT || 8000;
@@ -63,6 +67,8 @@ io.on("connection", (socket: socket.Socket) => {
   socket.on(getEndRoundResult, (data: onlyGameId) =>
     getEndRoundResultEvent(socket, io, data)
   );
+  socket.on(nextRound, (data: onlyGameId) => nextRoundEvent(socket, io, data));
+  socket.on(endGame, (data: onlyGameId) => endGameEvent(socket, io, data));
 });
 app.get("/", (_, res) => {
   const gameStateString = getGameStateAsString();

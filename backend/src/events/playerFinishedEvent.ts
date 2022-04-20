@@ -7,7 +7,6 @@ import {
   playerPlayedRound,
 } from "../serverState/playerState";
 import {
-  addPlayerScoreToGameResults,
   getGame,
   getLastRound,
   getSortedResults,
@@ -48,18 +47,15 @@ export const playerFinishedEvent = (
   const playerScore: number = calculateScore(
     roundData.answer,
     round.colors,
-    timeUsed.total("millisecond"),
+    timeUsed.total("millisecond") > game.timeEachRound
+      ? game.timeEachRound
+      : timeUsed.total("millisecond"),
     game.timeEachRound
   );
-  if (playerScore < 0) {
-    socket.emit(error, "Answer sequences were different");
-    return;
-  }
   //Now we have to update player
   //Things that need to be updated
   //add a new played round for that particular player
   //score from this round is added to score from previous rounds
-  console.log(player);
   playerPlayedRound(
     player.socketId,
     roundData.answer,
@@ -67,9 +63,6 @@ export const playerFinishedEvent = (
     game.gameId,
     timeUsed.total("millisecond")
   );
-  if (!addPlayerScoreToGameResults(player.socketId, playerScore, game.gameId)) {
-    socket.emit(error, "Could not add player score to game results");
-  }
   //potentially the game could inifinitely loop, so we need to have a callback in frontend
   if (allPlayersHavePlayed(game.gameId, round.round)) {
     io.in(game.gameId.toString()).emit(endRound, {
@@ -79,6 +72,4 @@ export const playerFinishedEvent = (
       result: getSortedResults(game.gameId),
     });
   }
-  console.log(player);
-  console.log(game);
 };

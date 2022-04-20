@@ -15,7 +15,6 @@ export interface game {
   difficulty: string;
   players: string[];
   maxPlayers: number;
-  result: result[];
   timeEachRound: number;
 }
 
