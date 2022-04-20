@@ -2,6 +2,7 @@ import { error, gameDeleted } from "../globalEvents";
 import { deleteGame, getGame } from "../serverState/gameState";
 import { Server, Socket } from "socket.io";
 import { game } from "../types/internalTypes";
+import { onlyGameId } from "../types/socketDataTypes";
 
 /**
  * Host sends game finished to server.
@@ -12,9 +13,9 @@ import { game } from "../types/internalTypes";
  * @param socket - socketId of host
  * @param gameId - id of game that is to be finished
  */
-export const endGameEvent = (socket: Socket, io: Server, gameId: number) => {
+export const endGameEvent = (socket: Socket, io: Server, data: onlyGameId) => {
   //retrieves game from gamestate
-  const game: game = getGame(gameId);
+  const game: game = getGame(data.gameId);
   if (!game) {
     socket.emit(error, "game does not exists");
   }
@@ -22,7 +23,7 @@ export const endGameEvent = (socket: Socket, io: Server, gameId: number) => {
     socket.emit(error, "You are not the host");
   }
   //Emit to everyone in room that you should return to startPage
-  io.in(gameId.toString()).emit(gameDeleted, {gameId: game.gameId});
+  io.in(data.gameId.toString()).emit(gameDeleted, { gameId: game.gameId });
   //Then, we delete game from gamestate
-  deleteGame(gameId);
+  deleteGame(data.gameId);
 };

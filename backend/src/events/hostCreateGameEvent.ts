@@ -22,6 +22,8 @@ export const hostCreateGameEvent = (
   while (getGame(gameId) != null) {
     gameId = (Math.random() * 100000) | 0;
   }
+  //TODO
+  gameId = 10000;
   const host: player = {
     name: data.nickname ?? "playerHost",
     socketId: socket.id,
@@ -36,14 +38,13 @@ export const hostCreateGameEvent = (
     difficulty: data.difficulty ?? "easy",
     players: [],
     rounds: [],
-    result: [],
     timeEachRound: getTimeForEachRoundMs(data.difficulty),
   };
   addGame(newGame);
   addPlayerToServerAndGame(newGame.gameId, host);
-  console.log(newGame);
   socket.emit(gameCreated, newGame);
   socket.join(gameId.toString());
-  console.log(`Dette er id til det nylig skapte game-room ${gameId}`);
-  console.log(`Laget av spilleren: ${host.name}`);
+  console.log(
+    `Dette er id til det nylig skapte game-room ${gameId} av ${host.name}`
+  );
 };
