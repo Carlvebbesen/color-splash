@@ -1,10 +1,13 @@
 import { Server, Socket } from "socket.io";
 import { game, player } from "../types/internalTypes";
 import { addGame, getGame } from "../serverState/gameState";
-import { error, gameCreated } from "../globalEvents";
+import { error, gameInfo } from "../globalEvents";
 import { createGameData } from "../types/socketDataTypes";
 import { getTimeForEachRoundMs } from "../utils";
-import { addPlayerToServerAndGame } from "../serverState/playerState";
+import {
+  addPlayerToServerAndGame,
+  getPlayersFromGameReturnObject,
+} from "../serverState/playerState";
 
 export const hostCreateGameEvent = (
   socket: Socket,
@@ -27,23 +30,28 @@ export const hostCreateGameEvent = (
     socketId: socket.id,
     gameId: gameId,
     roundsPlayed: [],
+    avatarIndex: 0,
   };
   const newGame: game = {
     gameId: gameId,
     hostId: host.socketId,
-    maxRound: data.rounds ?? 4,
+    maxRound: data.rounds && data.rounds <= 4 ? data.rounds : 4,
     maxPlayers: data.maxPlayers ?? 4,
     difficulty: data.difficulty ?? "easy",
     players: [],
     rounds: [],
-    result: [],
     timeEachRound: getTimeForEachRoundMs(data.difficulty),
   };
   addGame(newGame);
   addPlayerToServerAndGame(newGame.gameId, host);
-  console.log(newGame);
-  socket.emit(gameCreated, newGame);
+  socket.emit(gameInfo, {
+    playerCount: newGame.players.length,
+    gameId: newGame.gameId,
+    hostId: newGame.hostId,
+    players: getPlayersFromGameReturnObject(newGame.gameId),
+  });
   socket.join(gameId.toString());
-  console.log(`Dette er id til det nylig skapte game-room ${gameId}`);
-  console.log(`Laget av spilleren: ${host.name}`);
+  console.log(
+    `Dette er id til det nylig skapte game-room ${gameId} av ${host.name}`
+  );
 };

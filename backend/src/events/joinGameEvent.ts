@@ -5,7 +5,7 @@ import { getGame } from "../serverState/gameState";
 import { player } from "../types/internalTypes";
 import {
   addPlayerToServerAndGame,
-  getPlayersFromGame,
+  getPlayersFromGameReturnObject,
 } from "../serverState/playerState";
 
 export const joinGameEvent = (
@@ -16,6 +16,10 @@ export const joinGameEvent = (
   const game = getGame(data.gameId);
   if (game === null) {
     socket.emit(error, "Game does not exist");
+    return;
+  }
+  if (game.rounds.length > 0) {
+    socket.emit(error, "Game has already started");
     return;
   }
   if (game.players.length >= game.maxPlayers) {
@@ -37,6 +41,7 @@ export const joinGameEvent = (
     socketId: socket.id,
     gameId: game.gameId,
     roundsPlayed: [],
+    avatarIndex: game.players.length,
   };
   addPlayerToServerAndGame(game.gameId, player);
   socket.join(game.gameId.toString());
@@ -44,7 +49,7 @@ export const joinGameEvent = (
     playerCount: game.players.length,
     gameId: game.gameId,
     host: game.hostId,
-    nickNames: getPlayersFromGame(game.gameId),
+    nickNames: getPlayersFromGameReturnObject(game.gameId),
   });
   console.log(`player ${player.name} joined game ${game.gameId}`);
 };

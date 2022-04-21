@@ -15,7 +15,6 @@ export interface game {
   difficulty: string;
   players: string[];
   maxPlayers: number;
-  result: result[];
   timeEachRound: number;
 }
 
@@ -24,6 +23,7 @@ export interface player {
   socketId: string;
   gameId: number;
   roundsPlayed: playerRound[];
+  avatarIndex: number;
 }
 
 export interface playerRound {
@@ -44,4 +44,5 @@ export interface result {
   playerId: string;
   nickname: string;
   totalScore: number;
+  avatarIndex: number;
 }

@@ -1,6 +1,7 @@
+import { ReturnObjectPlayer } from "../types/serverToClientTypes";
 import { io } from "../server";
 import { playerState, player, playerRound } from "../types/internalTypes";
-import { deleteGame, getGame } from "./gameState";
+import { getGame } from "./gameState";
 
 const playerData: playerState = {
   players: [],
@@ -14,11 +15,6 @@ export const addPlayerToServerAndGame = (
   const game = getGame(gameId);
   if (game.players.find((p) => p === newPlayer.socketId) === undefined) {
     game.players.push(newPlayer.socketId);
-    game.result.push({
-      totalScore: 0,
-      nickname: newPlayer.name,
-      playerId: newPlayer.socketId,
-    });
   }
 };
 export const getPlayer = (playerId: string): player | null => {
@@ -55,7 +51,6 @@ export const playerDisconnected = async (socketId: string): Promise<number> => {
   if (player) {
     const isHost = await deletePlayer(socketId);
     if (isHost || getGame(player.gameId).players.length === 0) {
-      deleteGame(player.gameId);
       return player.gameId;
     }
   }
@@ -63,26 +58,39 @@ export const playerDisconnected = async (socketId: string): Promise<number> => {
 };
 export const deletePlayer = async (playerId: string): Promise<boolean> => {
   //returns boolean true if the player was the host
-  const index = playerData.players.indexOf(getPlayer(playerId) ?? null);
-  const game = getGame(getPlayer(playerId).gameId);
-  if (index > -1) {
-    playerData.players.splice(index, 1);
-    game.players = game.players.filter((player) => player !== playerId);
-    (await io.fetchSockets()).forEach((socket) => {
-      if (socket.id === playerId) {
-        socket.leave(game.gameId.toString());
-      }
-    });
-    return game.hostId == playerId;
+  const player = getPlayer(playerId);
+  playerData.players = playerData.players.filter(
+    (player) => player.socketId !== playerId
+  );
+  const game = getGame(player.gameId);
+  game.players = game.players.filter((player) => player !== playerId);
+  (await io.fetchSockets()).forEach((socket) => {
+    if (socket.id === playerId) {
+      socket.leave(game.gameId.toString());
+    }
+  });
+  if (game.hostId == playerId) {
+    return true;
   }
+  return false;
 };
 
-export const getPlayersFromGame = (gameId: number): player[] => {
+const getPlayersFromGame = (gameId: number): player[] => {
   return (
     getGame(gameId)
       ?.players.map((playerId) => getPlayer(playerId))
       .filter((player) => player !== null) ?? []
   );
+};
+export const getPlayersFromGameReturnObject = (
+  gameId: number
+): ReturnObjectPlayer[] => {
+  return getPlayersFromGame(gameId).map((player) => {
+    return {
+      name: player.name,
+      avatarIndex: player.avatarIndex,
+    };
+  });
 };
 
 export const getPlayerAsString = (): string => {
@@ -113,4 +121,16 @@ export const allPlayersHavePlayed = (
   return players.every((player) =>
     player.roundsPlayed.some((round) => round.round === roundNumber)
   );
+};
+export const getPlayerIdsNotPlayedRound = (
+  gameId: number,
+  roundNumber: number
+) => {
+  const players = getPlayersFromGame(gameId);
+  return players
+    .filter(
+      (player) =>
+        !player.roundsPlayed.some((round) => round.round === roundNumber)
+    )
+    .map((player) => player.socketId);
 };

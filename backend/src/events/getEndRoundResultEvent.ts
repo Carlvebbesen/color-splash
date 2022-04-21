@@ -13,6 +13,9 @@ export const getEndRoundResultEvent = (
   if (!game) {
     socket.emit(error, "game could not be found");
   }
+  if (game.hostId !== socket.id) {
+    socket.emit(error, "you are not the host");
+  }
 
   io.in(game.gameId.toString()).emit(endRound, {
     gameId: game.gameId,

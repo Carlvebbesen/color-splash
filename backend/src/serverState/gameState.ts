@@ -16,8 +16,8 @@ export const getGame = (gameId: number): game | null => {
 export const deleteGame = (gameId: number) => {
   const game = getGame(gameId);
   if (game) {
-    gameData.games = gameData.games.filter((game) => game.gameId !== gameId);
     game.players.forEach((playerId) => deletePlayer(playerId));
+    gameData.games = gameData.games.filter((game) => game.gameId !== gameId);
   }
 };
 
@@ -54,51 +54,28 @@ export const getGameStateAsString = (): string => {
       }
     });
     gameStateString += `<br\>`;
+    gameStateString += `<br\>`;
   });
   return gameStateString;
-};
-export const getResultForAPlayer = (
-  gameId: number,
-  playerId: string
-): result => {
-  const game = getGame(gameId);
-  if (game) {
-    return game.result.find((result) => result.playerId === playerId) ?? null;
-  }
-  return null;
-};
-
-export const addPlayerScoreToGameResults = (
-  playerId: string,
-  gameId: number,
-  score: number
-): result | null => {
-  const result = getResultForAPlayer(gameId, playerId);
-
-  if (result) {
-    result.totalScore += score;
-    return result;
-  }
-  const game = getGame(gameId);
-  if (game) {
-    game.result.push({
-      totalScore: score,
-      nickname: getPlayer(playerId)?.name ?? "player",
-      playerId: playerId,
-    });
-    return {
-      totalScore: score,
-      nickname: getPlayer(playerId)?.name ?? "player",
-      playerId: playerId,
-    };
-  }
-  return null;
 };
 
 export const getSortedResults = (gameId: number): result[] => {
   const game = getGame(gameId);
-  if (game) {
-    return game.result.sort((a, b) => b.totalScore - a.totalScore);
-  }
-  return [];
+  const resultList: result[] = [];
+  if (!game) return [];
+  game.players.forEach((playerId) => {
+    const player = getPlayer(playerId);
+    if (player) {
+      const totalScore = player.roundsPlayed.reduce((acc, round) => {
+        return acc + round.score;
+      }, 0);
+      resultList.push({
+        nickname: player.name,
+        playerId: player.socketId,
+        totalScore: totalScore,
+        avatarIndex: player.avatarIndex,
+      });
+    }
+  });
+  return resultList.sort((a, b) => b.totalScore - a.totalScore);
 };

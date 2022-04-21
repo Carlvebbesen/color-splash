@@ -1,6 +1,10 @@
 import { Server, Socket } from "socket.io";
+import {
+  allPlayersHavePlayed,
+  getPlayerIdsNotPlayedRound,
+} from "../serverState/playerState";
 import { error, roundStarted, timesUp } from "../globalEvents";
-import { deleteLastRound, getGame, setRoundStartedTime } from "../serverState/gameState";
+import { getGame, setRoundStartedTime } from "../serverState/gameState";
 import { onlyGameId } from "../types/socketDataTypes";
 
 export const colorsDisplayedFinishedEvent = (
@@ -20,15 +24,26 @@ export const colorsDisplayedFinishedEvent = (
       maxRound: game.maxRound,
       colors: game.rounds[game.rounds.length - 1],
     });
-    if(!setRoundStartedTime(game.gameId)){
+    if (!setRoundStartedTime(game.gameId)) {
       socket.emit(error, "could not set round started time");
       return;
     }
 
-    setTimeout(
-      () =>
-        io.in(game.gameId.toString()).emit(timesUp, { gameId: data.gameId }),
-      game.timeEachRound
-    );
+    setTimeout(async () => {
+      if (!allPlayersHavePlayed(game.gameId, game.rounds.length)) {
+        const players = getPlayerIdsNotPlayedRound(
+          game.gameId,
+          game.rounds.length
+        );
+        (await io.fetchSockets()).forEach((socket) => {
+          if (players.includes(socket.id)) {
+            socket.emit(timesUp, {
+              gameId: game.gameId,
+              round: game.rounds.length,
+            });
+          }
+        });
+      }
+    }, game.timeEachRound);
   }
 };

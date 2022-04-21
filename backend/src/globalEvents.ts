@@ -1,6 +1,5 @@
 export const error = "Error";
 export const hostCreateGame = "HostCreateGame";
-export const gameCreated = "GameCreated";
 export const joinGame = "JoinGame";
 export const gameInfo = "GameInfo";
 export const startGame = "StartGame";
