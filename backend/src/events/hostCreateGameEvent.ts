@@ -22,8 +22,6 @@ export const hostCreateGameEvent = (
   while (getGame(gameId) != null) {
     gameId = (Math.random() * 100000) | 0;
   }
-  //TODO
-  gameId = 10000;
   const host: player = {
     name: data.nickname ?? "playerHost",
     socketId: socket.id,
@@ -33,7 +31,7 @@ export const hostCreateGameEvent = (
   const newGame: game = {
     gameId: gameId,
     hostId: host.socketId,
-    maxRound: data.rounds ?? 4,
+    maxRound: data.rounds && data.rounds <= 4 ? data.rounds : 4,
     maxPlayers: data.maxPlayers ?? 4,
     difficulty: data.difficulty ?? "easy",
     players: [],

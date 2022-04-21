@@ -20,11 +20,11 @@ const getColors = (count: number): number[] => {
 export const getTimeForEachRoundMs = (difficulty: string): number => {
   switch (difficulty) {
     case "hard":
-      return 20000;
+      return 10000;
     case "medium":
-      return 20000;
+      return 10000;
     default:
-      return 20000;
+      return 10000;
   }
 };
 
@@ -38,14 +38,13 @@ export const calculateScore = (
   //For each correct color guessed, add 50 to score.
   //Then, multiply score by difference between maxTime and timeUsed multiplied by 10
   let score: number = 0;
-  score += Math.random() * 100;
   correctSequence.forEach((color, index) => {
     if (answers.length > index) {
       score += color === answers[index] ? 50 : 0;
     }
   });
   console.log(`Time used: ${maxTime - timeUsed}`);
-  score *= 1 + (maxTime - timeUsed) / 10000;
+  score *= 1 + (maxTime - timeUsed) / 1000;
   console.log(`Score: ${score}`);
   return Math.round(score);
 };

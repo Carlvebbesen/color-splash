@@ -27,7 +27,9 @@ export const colorsDisplayedFinishedEvent = (
 
     setTimeout(
       () =>
-        io.in(game.gameId.toString()).emit(timesUp, { gameId: data.gameId }),
+        io
+          .in(game.gameId.toString())
+          .emit(timesUp, { gameId: data.gameId, rounds: game.rounds.length }),
       game.timeEachRound
       //here we can add an emit to the client to tell them to show the endRound screen if alle players have submitted their colors
     );
