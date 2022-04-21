@@ -1,0 +1,55 @@
+@startuml Ouf
+
+group Create and Join Game
+    host -> server : HostCreateGame()
+    server --> host : GameCreated()
+    player -> server : JoinGame()
+    server --> player : GameInfo()
+    server --> host : GameInfo()
+end
+group Start Game
+    host -> server : StartGame()
+    server --> host : DisplayColors()
+    server --> player : DisplayColors()
+    player -> server : ColorsDisplayedFinished()
+    host -> server : ColorsDisplayedFinished()
+end
+group FirstRound
+    server --> host : RoundStarted()
+    server --> player : RoundStarted()
+    server -> server : Server starts timer, waits for answers
+    alt timesUp?
+        alt allPlayersAnswered?
+        server -> host : EndRound()
+        server -> player : EndRound()
+        else timeout before answers
+        server -> host : TimesUp()
+        server -> player : TimesUp()
+        end
+    else allPlayersAnswered?
+        server -> host : EndRound()
+        server -> player : EndRound()
+    end
+    player -> server : PlayerFinished()
+    host -> server : PlayerFinished()
+end
+
+host -> server : NextRound()
+group SubsequentRounds
+    server --> host : ...
+    server --> player : ...
+end
+
+group GameFinished
+    server -> host : GameFinished()
+    server -> player : GameFinished()
+    host --> server : EndGame()
+    server -> server : server deletes game
+end
+
+
+
+
+
+
+@enduml
