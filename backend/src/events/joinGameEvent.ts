@@ -48,8 +48,8 @@ export const joinGameEvent = (
   io.in(game.gameId.toString()).emit(gameInfo, {
     playerCount: game.players.length,
     gameId: game.gameId,
-    host: game.hostId,
-    nickNames: getPlayersFromGameReturnObject(game.gameId),
+    hostId: game.hostId,
+    players: getPlayersFromGameReturnObject(game.gameId),
   });
   console.log(`player ${player.name} joined game ${game.gameId}`);
 };
