@@ -1,10 +1,13 @@
 import { Server, Socket } from "socket.io";
 import { game, player } from "../types/internalTypes";
 import { addGame, getGame } from "../serverState/gameState";
-import { error, gameCreated } from "../globalEvents";
+import { error, gameInfo } from "../globalEvents";
 import { createGameData } from "../types/socketDataTypes";
 import { getTimeForEachRoundMs } from "../utils";
-import { addPlayerToServerAndGame } from "../serverState/playerState";
+import {
+  addPlayerToServerAndGame,
+  getPlayersFromGameReturnObject,
+} from "../serverState/playerState";
 
 export const hostCreateGameEvent = (
   socket: Socket,
@@ -41,7 +44,12 @@ export const hostCreateGameEvent = (
   };
   addGame(newGame);
   addPlayerToServerAndGame(newGame.gameId, host);
-  socket.emit(gameCreated, newGame);
+  socket.emit(gameInfo, {
+    playerCount: newGame.players.length,
+    gameId: newGame.gameId,
+    hostId: newGame.hostId,
+    players: getPlayersFromGameReturnObject(newGame.gameId),
+  });
   socket.join(gameId.toString());
   console.log(
     `Dette er id til det nylig skapte game-room ${gameId} av ${host.name}`

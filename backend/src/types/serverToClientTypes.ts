@@ -1,13 +1,18 @@
 import { game, result } from "./internalTypes";
 
 export interface ServerToClientEvents {
-  EndRound: (roundResult: roundResult) => void;
+  EndRound: (roundResult: RoundResult) => void;
   gameCreated: (game: game) => void;
 }
 
-interface roundResult {
+interface RoundResult {
   gameId: number;
   round: number;
   maxRound: number;
   result: result[];
+}
+
+export interface ReturnObjectPlayer {
+  name: string;
+  avatarIndex: number;
 }

@@ -1,6 +1,7 @@
+import { ReturnObjectPlayer } from "../types/serverToClientTypes";
 import { io } from "../server";
 import { playerState, player, playerRound } from "../types/internalTypes";
-import { deleteGame, getGame } from "./gameState";
+import { getGame } from "./gameState";
 
 const playerData: playerState = {
   players: [],
@@ -74,12 +75,22 @@ export const deletePlayer = async (playerId: string): Promise<boolean> => {
   return false;
 };
 
-export const getPlayersFromGame = (gameId: number): player[] => {
+const getPlayersFromGame = (gameId: number): player[] => {
   return (
     getGame(gameId)
       ?.players.map((playerId) => getPlayer(playerId))
       .filter((player) => player !== null) ?? []
   );
+};
+export const getPlayersFromGameReturnObject = (
+  gameId: number
+): ReturnObjectPlayer[] => {
+  return getPlayersFromGame(gameId).map((player) => {
+    return {
+      name: player.name,
+      avatarIndex: player.avatarIndex,
+    };
+  });
 };
 
 export const getPlayerAsString = (): string => {
