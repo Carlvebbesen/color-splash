@@ -1,4 +1,8 @@
 import { Server, Socket } from "socket.io";
+import {
+  allPlayersHavePlayed,
+  getPlayerIdsNotPlayedRound,
+} from "../serverState/playerState";
 import { error, roundStarted, timesUp } from "../globalEvents";
 import { getGame, setRoundStartedTime } from "../serverState/gameState";
 import { onlyGameId } from "../types/socketDataTypes";
@@ -25,13 +29,21 @@ export const colorsDisplayedFinishedEvent = (
       return;
     }
 
-    setTimeout(
-      () =>
-        io
-          .in(game.gameId.toString())
-          .emit(timesUp, { gameId: data.gameId, rounds: game.rounds.length }),
-      game.timeEachRound
-      //here we can add an emit to the client to tell them to show the endRound screen if alle players have submitted their colors
-    );
+    setTimeout(async () => {
+      if (!allPlayersHavePlayed(game.gameId, game.rounds.length)) {
+        const players = getPlayerIdsNotPlayedRound(
+          game.gameId,
+          game.rounds.length
+        );
+        (await io.fetchSockets()).forEach((socket) => {
+          if (players.includes(socket.id)) {
+            socket.emit(timesUp, {
+              gameId: game.gameId,
+              round: game.rounds.length,
+            });
+          }
+        });
+      }
+    }, game.timeEachRound);
   }
 };

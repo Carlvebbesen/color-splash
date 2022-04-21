@@ -18,6 +18,10 @@ export const joinGameEvent = (
     socket.emit(error, "Game does not exist");
     return;
   }
+  if (game.rounds.length > 0) {
+    socket.emit(error, "Game has already started");
+    return;
+  }
   if (game.players.length >= game.maxPlayers) {
     socket.emit(error, "Game is full");
     return;
@@ -37,6 +41,7 @@ export const joinGameEvent = (
     socketId: socket.id,
     gameId: game.gameId,
     roundsPlayed: [],
+    avatarIndex: game.players.length,
   };
   addPlayerToServerAndGame(game.gameId, player);
   socket.join(game.gameId.toString());

@@ -73,6 +73,7 @@ export const getSortedResults = (gameId: number): result[] => {
         nickname: player.name,
         playerId: player.socketId,
         totalScore: totalScore,
+        avatarIndex: player.avatarIndex,
       });
     }
   });

@@ -27,6 +27,7 @@ export const hostCreateGameEvent = (
     socketId: socket.id,
     gameId: gameId,
     roundsPlayed: [],
+    avatarIndex: 0,
   };
   const newGame: game = {
     gameId: gameId,
