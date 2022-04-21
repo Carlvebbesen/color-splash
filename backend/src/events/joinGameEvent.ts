@@ -5,7 +5,7 @@ import { getGame } from "../serverState/gameState";
 import { player } from "../types/internalTypes";
 import {
   addPlayerToServerAndGame,
-  getPlayersFromGame,
+  getPlayersFromGameReturnObject,
 } from "../serverState/playerState";
 
 export const joinGameEvent = (
@@ -49,7 +49,7 @@ export const joinGameEvent = (
     playerCount: game.players.length,
     gameId: game.gameId,
     host: game.hostId,
-    nickNames: getPlayersFromGame(game.gameId),
+    nickNames: getPlayersFromGameReturnObject(game.gameId),
   });
   console.log(`player ${player.name} joined game ${game.gameId}`);
 };
