@@ -111,3 +111,15 @@ export const allPlayersHavePlayed = (
     player.roundsPlayed.some((round) => round.round === roundNumber)
   );
 };
+export const getPlayerIdsNotPlayedRound = (
+  gameId: number,
+  roundNumber: number
+) => {
+  const players = getPlayersFromGame(gameId);
+  return players
+    .filter(
+      (player) =>
+        !player.roundsPlayed.some((round) => round.round === roundNumber)
+    )
+    .map((player) => player.socketId);
+};
