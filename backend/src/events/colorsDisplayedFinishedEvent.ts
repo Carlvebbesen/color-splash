@@ -22,7 +22,7 @@ export const colorsDisplayedFinishedEvent = (
       gameId: game.gameId,
       round: game.rounds.length,
       maxRound: game.maxRound,
-      colors: game.rounds[game.rounds.length - 1],
+      colors: game.rounds[game.rounds.length - 1].colors,
     });
     if (!setRoundStartedTime(game.gameId)) {
       socket.emit(error, "could not set round started time");
