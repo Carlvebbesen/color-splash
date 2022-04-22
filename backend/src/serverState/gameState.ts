@@ -35,12 +35,6 @@ export const setRoundStartedTime = (gameId: number): boolean => {
   }
   return false;
 };
-export const deleteLastRound = (gameId: number): void => {
-  const game = getGame(gameId);
-  if (game) {
-    game.rounds.pop();
-  }
-};
 
 export const getGameStateAsString = (): string => {
   let gameStateString = `Current GameState: <br\>`;
