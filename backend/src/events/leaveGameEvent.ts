@@ -17,6 +17,8 @@ export const leaveGameEvent = async (
     socket.emit(error, "Game does not exist");
     return;
   }
+  const isHost = await deletePlayer(socket.id);
+  socket.emit(gameDeleted, { gameId: game.gameId });
   if (game !== null && game.rounds.length === 0) {
     socket.to(game.gameId.toString()).emit(gameInfo, {
       playerCount: game.players.length,
@@ -27,9 +29,6 @@ export const leaveGameEvent = async (
       difficulty: game.difficulty,
     });
   }
-  socket.emit(gameDeleted, { gameId: game.gameId });
-  const isHost = await deletePlayer(socket.id);
-  console.log(isHost);
   if (isHost) {
     socket
       .to(data.gameId.toString())
