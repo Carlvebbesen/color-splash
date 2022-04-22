@@ -21,9 +21,9 @@ export const hostCreateGameEvent = (
     );
     return;
   }
-  let gameId = (Math.random() * 100000) | 0;
-  while (getGame(gameId) != null) {
-    gameId = (Math.random() * 100000) | 0;
+  let gameId = (1 + Math.random()) * 10000;
+  while (getGame(gameId) != null && gameId.toString().length == 5) {
+    gameId = (1 + Math.random()) * 10000;
   }
   const host: player = {
     name: data.nickname ?? "playerHost",
@@ -50,7 +50,7 @@ export const hostCreateGameEvent = (
     hostId: newGame.hostId,
     players: getPlayersFromGameReturnObject(newGame.gameId),
     rounds: newGame.maxRound,
-    difficulty: newGame.difficulty
+    difficulty: newGame.difficulty,
   });
   socket.join(gameId.toString());
   console.log(
