@@ -21,9 +21,9 @@ export const hostCreateGameEvent = (
     );
     return;
   }
-  let gameId = (1 + Math.random()) * 10000;
+  let gameId = Math.round((1 + Math.random()) * 10000);
   while (getGame(gameId) != null && gameId.toString().length == 5) {
-    gameId = (1 + Math.random()) * 10000;
+    gameId = Math.round((1 + Math.random()) * 10000);
   }
   const host: player = {
     name: data.nickname ?? "playerHost",

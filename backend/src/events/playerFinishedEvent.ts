@@ -70,6 +70,7 @@ export const playerFinishedEvent = (
       round: round.round,
       maxRound: game.maxRound,
       result: getSortedResults(game.gameId),
+      hostId: game.hostId,
     });
   }
 };
