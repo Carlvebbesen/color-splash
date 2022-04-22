@@ -22,5 +22,6 @@ export const getEndRoundResultEvent = (
     round: game.rounds.length,
     maxRound: game.maxRound,
     result: getSortedResults(game.gameId),
+    hostId: game.hostId,
   });
 };
