@@ -10,6 +10,7 @@ interface RoundResult {
   round: number;
   maxRound: number;
   result: result[];
+  hostId: string;
 }
 
 export interface ReturnObjectPlayer {

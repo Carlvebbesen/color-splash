@@ -11,6 +11,7 @@ import {
   getEndRoundResult,
   hostCreateGame,
   joinGame,
+  leaveGame,
   nextRound,
   playerFinished,
   startGame,
@@ -34,6 +35,7 @@ import { getPlayerAsString } from "./serverState/playerState";
 import { getEndRoundResultEvent } from "./events/getEndRoundResultEvent";
 import { nextRoundEvent } from "./events/nextRoundEvent";
 import { endGameEvent } from "./events/endGameEvent";
+import { leaveGameEvent } from "./events/leaveGameEvent";
 
 const app: express.Application = express();
 const port = process.env.PORT || 8000;
@@ -69,6 +71,7 @@ io.on("connection", (socket: socket.Socket) => {
   );
   socket.on(nextRound, (data: onlyGameId) => nextRoundEvent(socket, io, data));
   socket.on(endGame, (data: onlyGameId) => endGameEvent(socket, io, data));
+  socket.on(leaveGame, (data: onlyGameId) => leaveGameEvent(io, socket, data));
 });
 app.get("/", (_, res) => {
   const gameStateString = getGameStateAsString();
