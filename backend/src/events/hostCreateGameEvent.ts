@@ -49,6 +49,8 @@ export const hostCreateGameEvent = (
     gameId: newGame.gameId,
     hostId: newGame.hostId,
     players: getPlayersFromGameReturnObject(newGame.gameId),
+    rounds: newGame.rounds.length,
+    difficulty: newGame.difficulty
   });
   socket.join(gameId.toString());
   console.log(

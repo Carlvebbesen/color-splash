@@ -50,6 +50,8 @@ export const joinGameEvent = (
     gameId: game.gameId,
     hostId: game.hostId,
     players: getPlayersFromGameReturnObject(game.gameId),
+    rounds: game.rounds.length,
+    difficulty: game.difficulty
   });
   console.log(`player ${player.name} joined game ${game.gameId}`);
 };
