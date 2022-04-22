@@ -18,7 +18,7 @@ export const startGameEvent = (
     socket.emit(error, "you are not the host");
     return;
   }
-  if (game.players.length < 2) {
+  if (game.players.length < 1) {
     socket.emit(error, "not enough players");
     return;
   }
