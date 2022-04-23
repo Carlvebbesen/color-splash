@@ -32,7 +32,6 @@ export const playerFinishedEvent = (
   console.log(roundData);
   console.log(roundData.answer);
   console.log(roundData.gameId);
-
   const timeNow = Temporal.Now.instant();
   const game = getGame(roundData.gameId);
   let player = getPlayer(socket.id);
@@ -40,6 +39,9 @@ export const playerFinishedEvent = (
     socket.emit(error, "Game or player could not be found");
     return;
   }
+  const answerList: number[] = roundData.answer
+    .split("")
+    .map((answer) => parseInt(answer));
   const round = getLastRound(game.gameId);
   if (!round) {
     socket.emit(error, "Round could not be found");
@@ -49,7 +51,7 @@ export const playerFinishedEvent = (
     Temporal.Duration.from({ milliseconds: game.timeEachRound });
   //calculates score for this particular round
   const playerScore: number = calculateScore(
-    roundData.answer,
+    answerList,
     round.colors,
     timeUsed.total("millisecond") > game.timeEachRound
       ? game.timeEachRound
@@ -62,7 +64,7 @@ export const playerFinishedEvent = (
   //score from this round is added to score from previous rounds
   playerPlayedRound(
     player.socketId,
-    roundData.answer,
+    answerList,
     playerScore,
     game.gameId,
     timeUsed.total("millisecond")

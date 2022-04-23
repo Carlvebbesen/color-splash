@@ -14,5 +14,5 @@ export interface onlyGameId {
 }
 export interface playerAnswerGameId {
   gameId: number;
-  answer: number[];
+  answer: string;
 }
