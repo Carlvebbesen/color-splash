@@ -7,7 +7,6 @@ import {
   colorsDisplayedFinished,
   disconnect,
   endGame,
-  getEndRoundResult,
   hostCreateGame,
   joinGame,
   leaveGame,
@@ -30,7 +29,6 @@ import { colorsDisplayedFinishedEvent } from "./events/colorsDisplayedFinishedEv
 import { playerFinishedEvent } from "./events/playerFinishedEvent";
 import { getGameStateAsString } from "./serverState/gameState";
 import { getPlayerAsString } from "./serverState/playerState";
-import { getEndRoundResultEvent } from "./events/getEndRoundResultEvent";
 import { nextRoundEvent } from "./events/nextRoundEvent";
 import { endGameEvent } from "./events/endGameEvent";
 import { leaveGameEvent } from "./events/leaveGameEvent";
@@ -63,9 +61,6 @@ io.on("connection", (socket: socket.Socket) => {
   );
   socket.on(playerFinished, (data: playerAnswerGameId) =>
     playerFinishedEvent(socket, data)
-  );
-  socket.on(getEndRoundResult, (data: onlyGameId) =>
-    getEndRoundResultEvent(socket, io, data)
   );
   socket.on(nextRound, (data: onlyGameId) => nextRoundEvent(socket, io, data));
   socket.on(endGame, (data: onlyGameId) => endGameEvent(socket, io, data));
