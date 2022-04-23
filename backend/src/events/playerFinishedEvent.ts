@@ -7,6 +7,7 @@ import {
   playerPlayedRound,
 } from "../serverState/playerState";
 import {
+  checkValidGameForPlayer,
   getGame,
   getLastRound,
   getSortedResults,
@@ -29,16 +30,13 @@ export const playerFinishedEvent = (
   socket: Socket,
   roundData: playerAnswerGameId
 ) => {
-  console.log(roundData);
-  console.log(roundData.answer);
-  console.log(roundData.gameId);
+  const msg = checkValidGameForPlayer(roundData.gameId, socket.id, true);
+  if (msg !== "") {
+    socket.emit(error, msg);
+  }
   const timeNow = Temporal.Now.instant();
   const game = getGame(roundData.gameId);
   let player = getPlayer(socket.id);
-  if (!game || !player) {
-    socket.emit(error, "Game or player could not be found");
-    return;
-  }
   const answerList: number[] = roundData.answer
     .split("")
     .map((answer) => parseInt(answer));

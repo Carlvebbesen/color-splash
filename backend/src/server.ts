@@ -7,7 +7,6 @@ import {
   colorsDisplayedFinished,
   disconnect,
   endGame,
-  endRound,
   getEndRoundResult,
   hostCreateGame,
   joinGame,
@@ -28,7 +27,6 @@ import {
 } from "./types/socketDataTypes";
 import { startGameEvent } from "./events/startGameEvent";
 import { colorsDisplayedFinishedEvent } from "./events/colorsDisplayedFinishedEvent";
-import { playerRound } from "./types/internalTypes";
 import { playerFinishedEvent } from "./events/playerFinishedEvent";
 import { getGameStateAsString } from "./serverState/gameState";
 import { getPlayerAsString } from "./serverState/playerState";

@@ -73,3 +73,31 @@ export const getSortedResults = (gameId: number): result[] => {
   });
   return resultList.sort((a, b) => b.totalScore - a.totalScore);
 };
+export const checkValidGameForPlayer = (
+  gameId: number,
+  playerId: string,
+  afterGameStarted: boolean
+): string => {
+  const game = getGame(gameId);
+  if (!game) {
+    return "Game does not exist";
+  }
+  if (afterGameStarted) {
+    if (game.rounds.length === 0) {
+      return "Game has not started yet";
+    }
+  } else {
+    if (game.rounds.length > 0) {
+      return "Game has already started";
+    }
+  }
+  const player = getPlayer(playerId);
+  if (!player) {
+    return "Player does not exist";
+  }
+  if (!game.players.includes(playerId) || player.gameId !== gameId) {
+    return "Player is not in this game";
+  }
+
+  return "";
+};

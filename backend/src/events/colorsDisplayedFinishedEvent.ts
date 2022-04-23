@@ -4,7 +4,11 @@ import {
   getPlayerIdsNotPlayedRound,
 } from "../serverState/playerState";
 import { error, roundStarted, timesUp } from "../globalEvents";
-import { getGame, setRoundStartedTime } from "../serverState/gameState";
+import {
+  checkValidGameForPlayer,
+  getGame,
+  setRoundStartedTime,
+} from "../serverState/gameState";
 import { onlyGameId } from "../types/socketDataTypes";
 
 export const colorsDisplayedFinishedEvent = (
@@ -12,11 +16,12 @@ export const colorsDisplayedFinishedEvent = (
   io: Server,
   data: onlyGameId
 ) => {
-  const game = getGame(data.gameId);
-  if (!game) {
-    socket.emit(error, "game does not exist");
+  const msg = checkValidGameForPlayer(data.gameId, socket.id, true);
+  if (msg !== "") {
+    socket.emit(error, msg);
     return;
   }
+  const game = getGame(data.gameId);
   if (game.hostId === socket.id) {
     io.in(game.gameId.toString()).emit(roundStarted, {
       gameId: game.gameId,
