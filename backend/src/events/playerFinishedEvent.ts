@@ -31,7 +31,6 @@ export const playerFinishedEvent = (
 ) => {
   console.log(roundData);
   console.log(roundData.answer);
-  console.log(roundData.answer[0]);
   console.log(roundData.gameId);
 
   const timeNow = Temporal.Now.instant();
@@ -50,7 +49,7 @@ export const playerFinishedEvent = (
     Temporal.Duration.from({ milliseconds: game.timeEachRound });
   //calculates score for this particular round
   const playerScore: number = calculateScore(
-    roundData.answer[0],
+    roundData.answer,
     round.colors,
     timeUsed.total("millisecond") > game.timeEachRound
       ? game.timeEachRound
@@ -63,7 +62,7 @@ export const playerFinishedEvent = (
   //score from this round is added to score from previous rounds
   playerPlayedRound(
     player.socketId,
-    roundData.answer[0],
+    roundData.answer,
     playerScore,
     game.gameId,
     timeUsed.total("millisecond")

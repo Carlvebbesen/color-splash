@@ -38,11 +38,17 @@ export const calculateScore = (
   //For each correct color guessed, add 50 to score.
   //Then, multiply score by difference between maxTime and timeUsed multiplied by 10
   let score: number = 0;
+  console.log(answers);
+  console.log(`maxTime: ${maxTime}`);
   correctSequence.forEach((color, index) => {
     if (answers.length > index) {
+      console.log(`${color} vs answer: ${answers[index]}`);
       score += color === answers[index] ? 50 : 0;
     }
   });
+  console.log(`Score: ${score}`);
   score *= 1 + (maxTime - timeUsed) / 1000;
+  console.log(`ScoreAfter: ${score}`);
+
   return Math.round(score);
 };
