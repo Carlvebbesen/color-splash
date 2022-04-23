@@ -12,6 +12,7 @@ export const startGameEvent = (
   const msg = checkValidGameForPlayer(data.gameId, socket.id, false);
   if (msg !== "") {
     socket.emit(error, msg);
+    return;
   }
   const game = getGame(data.gameId);
   if (game.hostId !== socket.id) {

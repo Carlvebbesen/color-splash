@@ -33,6 +33,7 @@ export const playerFinishedEvent = (
   const msg = checkValidGameForPlayer(roundData.gameId, socket.id, true);
   if (msg !== "") {
     socket.emit(error, msg);
+    return;
   }
   const timeNow = Temporal.Now.instant();
   const game = getGame(roundData.gameId);
