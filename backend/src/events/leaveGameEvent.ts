@@ -19,6 +19,7 @@ export const leaveGameEvent = async (
   const msg = checkValidGameForPlayer(data.gameId, socket.id, false);
   if (msg !== "") {
     socket.emit(error, msg);
+    return;
   }
   const game = getGame(data.gameId);
   const isHost = await deletePlayer(socket.id);

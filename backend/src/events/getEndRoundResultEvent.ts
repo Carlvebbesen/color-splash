@@ -16,6 +16,7 @@ export const getEndRoundResultEvent = (
   const msg = checkValidGameForPlayer(data.gameId, socket.id, true);
   if (msg !== "") {
     socket.emit(error, msg);
+    return;
   }
   const game: game = getGame(data.gameId);
   if (game.hostId !== socket.id) {
