@@ -13,12 +13,11 @@ export const joinGameEvent = (
   io: Server,
   data: gameIdNickname
 ) => {
-  const msg = checkValidGameForPlayer(data.gameId, socket.id, false);
-  if (msg !== "") {
-    socket.emit(error, msg);
+  const game = getGame(data.gameId);
+  if (!game) {
+    socket.emit(error, "game does not exist");
     return;
   }
-  const game = getGame(data.gameId);
   if (game.players.length >= game.maxPlayers) {
     socket.emit(error, "Game is full");
     return;
