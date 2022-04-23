@@ -8,10 +8,8 @@ import {
 } from "../serverState/playerState";
 
 const disconnectEvent = async (socket: Socket, io: Server) => {
-  console.log(`a user disconnected with, socketid:${socket.id}`);
   const game = getGame(getPlayer(socket.id)?.gameId);
   const isHostOrLast = await playerDisconnected(socket.id);
-  console.log(`Result disconnected: ${isHostOrLast}`);
   if (game !== null && game.rounds.length === 0) {
     io.in(game.gameId.toString()).emit(gameInfo, {
       playerCount: game.players.length,

@@ -103,9 +103,7 @@ export const getPlayerAsString = (): string => {
     }<br\> RoundsCount: ${player.roundsPlayed.length}<br\>Results:<br\>${[
       ...player.roundsPlayed.map(
         (round: playerRound) =>
-          `${round.round}.\t Score: ${round.score} Time Used: ${
-            round.timeUsed
-          } Answer: [${[...round.answer]}]`
+          `${round.round}.\t Score: ${round.score} Time Used: ${round.timeUsed} Answer: [${round.answer}]`
       ),
     ]}<br\><br\>`;
   });

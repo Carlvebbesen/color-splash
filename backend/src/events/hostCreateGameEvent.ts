@@ -53,7 +53,4 @@ export const hostCreateGameEvent = (
     difficulty: newGame.difficulty,
   });
   socket.join(gameId.toString());
-  console.log(
-    `Dette er id til det nylig skapte game-room ${gameId} av ${host.name}`
-  );
 };

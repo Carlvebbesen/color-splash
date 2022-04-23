@@ -43,8 +43,6 @@ export const calculateScore = (
       score += color === answers[index] ? 50 : 0;
     }
   });
-  console.log(`Time used: ${maxTime - timeUsed}`);
   score *= 1 + (maxTime - timeUsed) / 1000;
-  console.log(`Score: ${score}`);
   return Math.round(score);
 };
