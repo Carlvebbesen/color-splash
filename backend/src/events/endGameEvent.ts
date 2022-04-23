@@ -20,16 +20,18 @@ import { deletePlayer } from "../serverState/playerState";
  */
 export const endGameEvent = (socket: Socket, io: Server, data: onlyGameId) => {
   //retrieves game from gamestate
-  const msg = checkValidGameForPlayer(data.gameId, socket.id, true);
-  if (msg !== "") {
-    socket.emit(error, msg);
-    return;
-  }
-  const game: game = getGame(data.gameId);
-  if (socket.id === game.hostId) {
-    deleteGame(data.gameId);
-  } else {
-    deletePlayer(socket.id);
+  const game = getGame(data.gameId);
+  if (game) {
+    const msg = checkValidGameForPlayer(data.gameId, socket.id, true);
+    if (msg !== "") {
+      socket.emit(error, msg);
+      return;
+    }
+    if (socket.id === game.hostId) {
+      deleteGame(data.gameId);
+    } else {
+      deletePlayer(socket.id);
+    }
   }
   //Then, we delete game from gamestate
 };
