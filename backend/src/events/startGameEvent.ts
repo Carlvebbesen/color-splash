@@ -1,5 +1,5 @@
 import { Server, Socket } from "socket.io";
-import { getGame } from "../serverState/gameState";
+import { checkValidGameForPlayer, getGame } from "../serverState/gameState";
 import { displayColors, error } from "../globalEvents";
 import { onlyGameId } from "../types/socketDataTypes";
 import { generateColors } from "../utils";
@@ -9,21 +9,13 @@ export const startGameEvent = (
   io: Server,
   data: onlyGameId
 ) => {
-  const game = getGame(data.gameId);
-  if (game === null) {
-    socket.emit(error, "game does not exist");
-    return;
+  const msg = checkValidGameForPlayer(data.gameId, socket.id, false);
+  if (msg !== "") {
+    socket.emit(error, msg);
   }
+  const game = getGame(data.gameId);
   if (game.hostId !== socket.id) {
     socket.emit(error, "you are not the host");
-    return;
-  }
-  if (game.players.length < 1) {
-    socket.emit(error, "not enough players");
-    return;
-  }
-  if (game.rounds.length > 0) {
-    socket.emit(error, "game is already started");
     return;
   }
   const roundColors = generateColors(game.difficulty);

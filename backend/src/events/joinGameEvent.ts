@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { gameIdNickname } from "../types/socketDataTypes";
 import { error, gameInfo } from "../globalEvents";
-import { getGame } from "../serverState/gameState";
+import { checkValidGameForPlayer, getGame } from "../serverState/gameState";
 import { player } from "../types/internalTypes";
 import {
   addPlayerToServerAndGame,
@@ -13,21 +13,14 @@ export const joinGameEvent = (
   io: Server,
   data: gameIdNickname
 ) => {
+  const msg = checkValidGameForPlayer(data.gameId, socket.id, false);
+  if (msg !== "") {
+    socket.emit(error, msg);
+  }
   const game = getGame(data.gameId);
-  if (game === null) {
-    socket.emit(error, "Game does not exist");
-    return;
-  }
-  if (game.rounds.length > 0) {
-    socket.emit(error, "Game has already started");
-    return;
-  }
   if (game.players.length >= game.maxPlayers) {
     socket.emit(error, "Game is full");
     return;
-  }
-  if (game.rounds.length > 0) {
-    socket.emit(error, "Game is already started");
   }
   if (socket.rooms.size > 1) {
     socket.emit(

@@ -1,6 +1,10 @@
 import { onlyGameId } from "../types/socketDataTypes";
 import { error, gameDeleted, gameInfo } from "../globalEvents";
-import { deleteGame, getGame } from "../serverState/gameState";
+import {
+  checkValidGameForPlayer,
+  deleteGame,
+  getGame,
+} from "../serverState/gameState";
 import {
   deletePlayer,
   getPlayersFromGameReturnObject,
@@ -12,13 +16,12 @@ export const leaveGameEvent = async (
   socket: Socket,
   data: onlyGameId
 ) => {
-  const game = getGame(data.gameId);
-  if (game === null || !game.players.includes(socket.id)) {
-    socket.emit(error, "Game does not exist");
-    return;
+  const msg = checkValidGameForPlayer(data.gameId, socket.id, false);
+  if (msg !== "") {
+    socket.emit(error, msg);
   }
+  const game = getGame(data.gameId);
   const isHost = await deletePlayer(socket.id);
-  socket.emit(gameDeleted, { gameId: game.gameId });
   if (game !== null && game.rounds.length === 0) {
     socket.to(game.gameId.toString()).emit(gameInfo, {
       playerCount: game.players.length,
@@ -30,9 +33,7 @@ export const leaveGameEvent = async (
     });
   }
   if (isHost) {
-    socket
-      .to(data.gameId.toString())
-      .emit(gameDeleted, { gameId: game.gameId });
+    socket.to(data.gameId.toString()).emit(gameDeleted, "Host ended the game");
     deleteGame(data.gameId);
   }
 };

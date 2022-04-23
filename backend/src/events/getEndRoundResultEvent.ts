@@ -1,7 +1,11 @@
 import { Socket, Server } from "socket.io";
 import { onlyGameId } from "../types/socketDataTypes";
 import { endRound, error } from "../globalEvents";
-import { getGame, getSortedResults } from "../serverState/gameState";
+import {
+  checkValidGameForPlayer,
+  getGame,
+  getSortedResults,
+} from "../serverState/gameState";
 import { game } from "../types/internalTypes";
 
 export const getEndRoundResultEvent = (
@@ -9,10 +13,11 @@ export const getEndRoundResultEvent = (
   io: Server,
   data: onlyGameId
 ) => {
-  const game: game = getGame(data.gameId);
-  if (!game) {
-    socket.emit(error, "game could not be found");
+  const msg = checkValidGameForPlayer(data.gameId, socket.id, true);
+  if (msg !== "") {
+    socket.emit(error, msg);
   }
+  const game: game = getGame(data.gameId);
   if (game.hostId !== socket.id) {
     socket.emit(error, "you are not the host");
   }

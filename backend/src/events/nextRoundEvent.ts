@@ -1,7 +1,11 @@
 import { displayColors, gameFinished } from "../globalEvents";
 import { error } from "../globalEvents";
 import { Server, Socket } from "socket.io";
-import { getGame, getSortedResults } from "../serverState/gameState";
+import {
+  checkValidGameForPlayer,
+  getGame,
+  getSortedResults,
+} from "../serverState/gameState";
 import { getPlayer } from "../serverState/playerState";
 import { generateColors } from "../utils";
 import { onlyGameId } from "../types/socketDataTypes";
@@ -20,12 +24,11 @@ export const nextRoundEvent = (
   io: Server,
   data: onlyGameId
 ) => {
-  const game = getGame(data.gameId);
-
-  if (!game) {
-    socket.emit(error, "Game does not exists");
+  const msg = checkValidGameForPlayer(data.gameId, socket.id, true);
+  if (msg !== "") {
+    socket.emit(error, msg);
   }
-
+  const game = getGame(data.gameId);
   if (socket.id !== game.hostId) {
     socket.emit(error, "You are not the host");
   }

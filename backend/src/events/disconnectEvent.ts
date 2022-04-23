@@ -21,7 +21,7 @@ const disconnectEvent = async (socket: Socket, io: Server) => {
     });
   }
   if (isHostOrLast && isHostOrLast != 0) {
-    io.in(isHostOrLast.toString()).emit(gameDeleted, { gameId: isHostOrLast });
+    io.in(isHostOrLast.toString()).emit(gameDeleted, "Host ended the game");
     deleteGame(isHostOrLast);
   }
 };
