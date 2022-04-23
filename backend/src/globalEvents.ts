@@ -7,7 +7,6 @@ export const displayColors = "DisplayColors";
 export const colorsDisplayedFinished = "ColorsDisplayedFinished";
 export const roundStarted = "RoundStarted";
 export const playerFinished = "PlayerFinished";
-export const timesUp = "TimesUp";
 export const endRound = "EndRound";
 export const nextRound = "NextRound";
 export const gameFinished = "GameFinished";

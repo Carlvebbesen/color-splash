@@ -1,7 +1,8 @@
 import { ReturnObjectPlayer } from "../types/serverToClientTypes";
 import { io } from "../server";
 import { playerState, player, playerRound } from "../types/internalTypes";
-import { getGame } from "./gameState";
+import { getGame, getLastRound, getSortedResults } from "./gameState";
+import { endRound } from "../globalEvents";
 
 const playerData: playerState = {
   players: [],
@@ -49,8 +50,27 @@ export const playerDisconnected = async (socketId: string): Promise<number> => {
     (player) => player.socketId === socketId
   );
   if (player) {
+    const game = getGame(player.gameId);
+    const players = getPlayersFromGame(game.gameId);
+    const shouldNotifyPlayers =
+      game.rounds.length !== player.roundsPlayed.length &&
+      players
+        .filter((player) => player.socketId !== socketId)
+        .every((player) => player.roundsPlayed.length === game.rounds.length);
     const isHost = await deletePlayer(socketId);
-    if (isHost || getGame(player.gameId).players.length === 0) {
+    if (shouldNotifyPlayers) {
+      const round = getLastRound(game.gameId);
+      if (round) {
+        io.in(game.gameId.toString()).emit(endRound, {
+          gameId: game.gameId,
+          round: round.round,
+          maxRound: game.maxRound,
+          result: getSortedResults(game.gameId),
+          hostId: game.hostId,
+        });
+      }
+    }
+    if (isHost || game?.players.length === 0) {
       return player.gameId;
     }
   }
