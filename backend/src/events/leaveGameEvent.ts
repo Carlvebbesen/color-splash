@@ -16,7 +16,7 @@ export const leaveGameEvent = async (
   socket: Socket,
   data: onlyGameId
 ) => {
-  const msg = checkValidGameForPlayer(data.gameId, socket.id, true);
+  const msg = checkValidGameForPlayer(data.gameId, socket.id, false);
   if (msg !== "") {
     socket.emit(error, msg);
   }
