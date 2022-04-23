@@ -29,6 +29,11 @@ export const playerFinishedEvent = (
   socket: Socket,
   roundData: playerAnswerGameId
 ) => {
+  console.log(roundData);
+  console.log(roundData.answer);
+  console.log(roundData.answer[0]);
+  console.log(roundData.gameId);
+
   const timeNow = Temporal.Now.instant();
   const game = getGame(roundData.gameId);
   let player = getPlayer(socket.id);
