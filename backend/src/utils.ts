@@ -43,7 +43,8 @@ export const calculateScore = (
       score += color === answers[index] ? 100 : 0;
     }
   });
-  score *= 1 + (maxTime - timeUsed) / 2000;
+  const maxTimeScore = 300;
+  const timeScore = ((maxTime - timeUsed) / maxTime) * maxTimeScore;
+  score += timeScore;
   return Math.round(score);
 };
-
