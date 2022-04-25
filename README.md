@@ -6,27 +6,26 @@ Click [here](https://github.com/FabianFoss/color-splash-frontend) to get to the 
 ## Structure
 ```
 .
-├── .github/workflows #CI/CD to push the backend to Heroku, the hosting service we decided to use.
-├── backend #The folder containing all backend code
+├── .github/workflows     #CI/CD to push the backend to Heroku, the hosting service we decided to use.
+├── backend               #The folder containing all backend code
   ├── src
-    ├── events #Folder containing all the different events our server listen on
-    ├── serverState #Folder containing the internal serverstate, for alle games and players
-    └── types #All the types used in backend
+    ├── events                #Folder containing all the different events our server listen on
+    ├── serverState           #Folder containing the internal serverstate, for alle games and players
+    └── types                 #All the types used in backend
   ├── .DS_Store
-  ├── globalEvents.ts #all the different events to send and recieve as string constants
-  ├── server.ts #the file setting up the server and socket.io connection
-  └── utils.ts #all logical functions used backend
+  ├── globalEvents.ts       #All the different events to send and recieve as string constants
+  ├── server.ts             #The file setting up the server and socket.io connection
+  └── utils.ts              #All logical functions used backend
 ├── .DS_Store               
 └──  README.md
 ```
 Our project is divided into two distinct repositories as they are not dependent of each other.
 
 ## How to compile and run backend
-Move to the backend folder, command: ```cd backend```.
-
-Start by installing all dependencies by running ```npm install```.
-
-Then to run the backend run the command: ```npm start ```. The project will build itself, and compile it to the ```/dist folder```. It will also recompile on changes. The server will run on ```http://localhost:8000``` if not a port is specified in an ```.env file```.
+1. Clone or download the repository
+2. Go to the backend folder, command: ```cd backend```.
+3. Start by installing all dependencies by running ```npm install```.
+4. Then to run the backend run the command: ```npm start ```. The project will build itself, and compile it to the ```/dist folder```. It will also recompile on changes. The server will run on ```http://localhost:8000``` if not a port is specified in an ```.env file```.
 
 If you want to build the backend run: ```npm run build```. The build will appear in the ```/dist folder```.
 
