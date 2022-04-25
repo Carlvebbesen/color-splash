@@ -82,19 +82,18 @@ app.get("/", (_, res) => {
     <meta charset="UTF-8" />
   </head>
   <body>
-    <!-- Your HTML here -->
-    <p>Welcome to an Express server with websockets!<br/><br/>Port: ${port}.<br/>PlayerCount: ${io.engine.clientsCount}.</p>
-    <br/>
-    The current state of the game is:<br/>
-    <br/>
-    ${gameStateString} <br/>
-    <br/>
-    ${playerStateString} <br/>
-
-    <br/>
-    <br/>
-    <h2> Download the game for android <a href="https://color-splash.herokuapp.com/download-apk" download="ColorSplash.apk">here</a> </h2>
-    </body>
+  <!-- Your HTML here -->
+  <p>Welcome to an Express server with websockets!<br/><br/>Port: ${port}.<br/>PlayerCount: ${io.engine.clientsCount}.</p>
+  <br/>
+  <br/>
+  <h2> Download the game for android <a href="https://color-splash.herokuapp.com/download-apk" download="ColorSplash.apk">here</a> </h2>
+  <br/>
+  The current state of the game is:<br/>
+  <br/>
+  ${gameStateString} <br/>
+  <br/>
+  ${playerStateString} <br/>
+  </body>
 </html>
     `
   );
