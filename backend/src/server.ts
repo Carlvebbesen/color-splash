@@ -65,7 +65,7 @@ io.on("connection", (socket: socket.Socket) => {
   socket.on(leaveGame, (data: onlyGameId) => leaveGameEvent(io, socket, data));
 });
 app.get("/download-apk", (_, res) => {
-  const file = "./src/downloadGame/android-debug.apk";
+  const file = "./src/downloadGame/colorSplash.apk";
   res.download(file);
   res.status(200);
 });
