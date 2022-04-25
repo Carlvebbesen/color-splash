@@ -1,5 +1,4 @@
 export interface ClientToServerEvents {
-  hello: () => void;
   playerAnswer: (playerData: any) => void;
   playerRestartGame: (playerData: any) => void;
   hostCreateNewGame: (socket: any) => void;

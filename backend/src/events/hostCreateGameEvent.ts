@@ -9,6 +9,18 @@ import {
   getPlayersFromGameReturnObject,
 } from "../serverState/playerState";
 
+/**
+ * Event sent from frontend when the client creates a game. 
+ * @returns error if the player is already in a game.
+ * @returns the "gameInfo" event to the socket.io room if the game was created successfully.
+ * @param io - the io instance for this server
+ * @param socket - socket for the given player
+ * @param data - dataObject containing:
+ * rounds: number;
+ * nickname: string;
+ * difficulty: string;
+ * maxPlayers: number;
+ */
 export const hostCreateGameEvent = (
   socket: Socket,
   io: Server,

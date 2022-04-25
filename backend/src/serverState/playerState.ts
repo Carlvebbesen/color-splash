@@ -114,7 +114,7 @@ export const getPlayersFromGameReturnObject = (
 };
 
 export const getPlayerAsString = (): string => {
-  let playerStateString = `<br\>Current PlayerState:<br\>`;
+  let playerStateString = `<br\>PlayerState:<br\>`;
   playerData.players.forEach((player) => {
     playerStateString += `Player ${player.name}.\t inGame: ${
       getGame(player.gameId).gameId
@@ -123,7 +123,7 @@ export const getPlayerAsString = (): string => {
     }<br\> RoundsCount: ${player.roundsPlayed.length}<br\>Results:<br\>${[
       ...player.roundsPlayed.map(
         (round: playerRound) =>
-          `${round.round}.\t Score: ${round.score} Time Used: ${round.timeUsed} Answer: ${round.answer}`
+          `${round.round}.\t Score: ${round.score} \tTime Used: ${round.timeUsed} Answer: ${round.answer}<br\>`
       ),
     ]}<br\><br\>`;
   });

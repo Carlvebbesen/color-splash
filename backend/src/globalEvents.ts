@@ -1,3 +1,4 @@
+//all the events used in the application
 export const error = "Error";
 export const hostCreateGame = "HostCreateGame";
 export const joinGame = "JoinGame";

@@ -4,6 +4,14 @@ import { displayColors, error } from "../globalEvents";
 import { onlyGameId } from "../types/socketDataTypes";
 import { generateColors } from "../utils";
 
+/**
+ * Event sent from frontend when the host-client wants to start the game
+ * @returns error if the player is not host or not in a valid game
+ * @returns the "displayColors" event to the socket.io room if the game should start displaying colors.
+ * @param io - the io instance for this server
+ * @param socket - socket for the given player
+ * @param data - dataObject containing the gameId
+ */
 export const startGameEvent = (
   socket: Socket,
   io: Server,

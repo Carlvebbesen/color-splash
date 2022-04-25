@@ -5,18 +5,17 @@ import {
   getGame,
 } from "../serverState/gameState";
 import { Server, Socket } from "socket.io";
-import { game } from "../types/internalTypes";
 import { onlyGameId } from "../types/socketDataTypes";
 import { deletePlayer } from "../serverState/playerState";
 
 /**
  * Host sends game finished to server.
  * Backend checks that games hostId matches with socketId.
- * Then emits to everyone the endgame event, which frontend listens to
- * and sends every client (including host) back to start page and deletes
- * game corresponding to that id.
+ * Backend deletes the player from the game.
+ * if the player is the host the game and all the players is deleted.
  * @param socket - socketId of host
- * @param gameId - id of game that is to be finished
+ * @param io - socket.io instance
+ * @param data - an object containing the gameId
  */
 export const endGameEvent = (socket: Socket, io: Server, data: onlyGameId) => {
   //retrieves game from gamestate
@@ -33,5 +32,4 @@ export const endGameEvent = (socket: Socket, io: Server, data: onlyGameId) => {
       deletePlayer(socket.id);
     }
   }
-  //Then, we delete game from gamestate
 };

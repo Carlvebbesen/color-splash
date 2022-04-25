@@ -11,6 +11,15 @@ import {
 } from "../serverState/playerState";
 import { Server, Socket } from "socket.io";
 
+/**
+ * Event sent from frontend when the client leaves the current game
+ * @returns error if the player is not in a valid game
+ * @returns the "gameInfo" event to the socket.io room if the game has not started yet.
+ * @returns the "gameDeleted" event if the host leave the game.
+ * @param io - the io instance for this server
+ * @param socket - socket for the given player
+ * @param data - dataObject containing the gameId
+ */
 export const leaveGameEvent = async (
   io: Server,
   socket: Socket,

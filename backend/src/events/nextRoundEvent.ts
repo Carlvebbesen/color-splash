@@ -6,18 +6,17 @@ import {
   getGame,
   getSortedResults,
 } from "../serverState/gameState";
-import { getPlayer } from "../serverState/playerState";
 import { generateColors } from "../utils";
 import { onlyGameId } from "../types/socketDataTypes";
 
 /**
- * Takes in a gameID and a socketId/playerID.
- * Finds game from gameID, and checks if hostId matches with socketId
- * Then generates a new round, with new randomized colors and
- * updates the corresponding datastructurs to reflect new round.
- *
- * @param socket - host socket
- * @param gameId - gameId for a particular game
+ * Event sent from frontend when the client creates a game.
+ * @returns error if it is a valid game
+ * @returns the "displayColors" event to the socket.io room if the game has more rounds.
+ * @returns the "gameFinished" event to the socket.io room if the game is finished.
+ * @param io - the io instance for this server
+ * @param socket - socket for the given player
+ * @param data - dataObject containing the gameId
  */
 export const nextRoundEvent = (
   socket: Socket,

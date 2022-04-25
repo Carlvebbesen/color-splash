@@ -14,7 +14,6 @@ import {
   playerFinished,
   startGame,
 } from "./globalEvents";
-import { InterServerEvents } from "./types/interServerTypes";
 import { ServerToClientEvents } from "./types/serverToClientTypes";
 import { ClientToServerEvents } from "./types/clientToServerTypes";
 import { joinGameEvent } from "./events/joinGameEvent";
@@ -36,15 +35,14 @@ import { leaveGameEvent } from "./events/leaveGameEvent";
 const app: express.Application = express();
 const port = process.env.PORT || 8000;
 const server: http.Server = http.createServer(app);
-export const io = new socket.Server<
-  ClientToServerEvents,
-  ServerToClientEvents,
-  InterServerEvents
->(server, {
-  cors: {
-    origin: "*",
-  },
-});
+export const io = new socket.Server<ClientToServerEvents, ServerToClientEvents>(
+  server,
+  {
+    cors: {
+      origin: "*",
+    },
+  }
+);
 //setup the start connection
 //add events here when they are made in the backend
 io.on("connection", (socket: socket.Socket) => {
@@ -66,7 +64,7 @@ io.on("connection", (socket: socket.Socket) => {
   socket.on(endGame, (data: onlyGameId) => endGameEvent(socket, io, data));
   socket.on(leaveGame, (data: onlyGameId) => leaveGameEvent(io, socket, data));
 });
-app.get("/gameApk", (_, res) => {
+app.get("/download-apk", (_, res) => {
   const file = "./src/downloadGame/android-debug.apk";
   res.download(file);
   res.status(200);
@@ -75,13 +73,19 @@ app.get("/", (_, res) => {
   const gameStateString = getGameStateAsString();
   const playerStateString = getPlayerAsString();
   res.send(
-    `<html lang="no">
+    `
+    <!DOCTYPE html>
+    <head><meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    </head>
+    <html lang="no">
   <head>
     <meta charset="UTF-8" />
   </head>
   <body>
     <!-- Your HTML here -->
-    <p>Welcome to an Express server with websockets! port: ${port}. PlayerCount: ${io.engine.clientsCount}.</p>
+    <p>Welcome to an Express server with websockets!<br/><br/>Port: ${port}.<br/>PlayerCount: ${io.engine.clientsCount}.</p>
+    <br/>
+    The current state of the game is:<br/>
     <br/>
     ${gameStateString} <br/>
     <br/>
@@ -89,7 +93,7 @@ app.get("/", (_, res) => {
 
     <br/>
     <br/>
-    <h2> Download the game for android <a href="https://color-splash.herokuapp.com/gameApk" download="ColorSplash.apk">here</a> </h2>
+    <h2> Download the game for android <a href="https://color-splash.herokuapp.com/download-apk" download="ColorSplash.apk">here</a> </h2>
     </body>
 </html>
     `

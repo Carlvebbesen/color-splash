@@ -37,7 +37,7 @@ export const setRoundStartedTime = (gameId: number): boolean => {
 };
 
 export const getGameStateAsString = (): string => {
-  let gameStateString = `Current GameState: <br\>`;
+  let gameStateString = `GameState: <br\>`;
   gameData.games.forEach((game) => {
     gameStateString += `Game ${game.gameId}.\t RoundsPlayed: ${game.rounds.length}.\tDifficulty: ${game.difficulty} playerCount: ${game.players.length}.<br\>`;
     gameStateString += `Players: <br\>`;

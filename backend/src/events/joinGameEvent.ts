@@ -1,13 +1,23 @@
 import { Server, Socket } from "socket.io";
 import { gameIdNickname } from "../types/socketDataTypes";
 import { error, gameInfo } from "../globalEvents";
-import { checkValidGameForPlayer, getGame } from "../serverState/gameState";
+import { getGame } from "../serverState/gameState";
 import { player } from "../types/internalTypes";
 import {
   addPlayerToServerAndGame,
   getPlayersFromGameReturnObject,
 } from "../serverState/playerState";
 
+/**
+ * Event sent from frontend when the client want to join a game
+ * @returns error if the player is already in a game or game is full
+ * @returns the "gameInfo" event to the socket.io room if the player joined successfully.
+ * @param io - the io instance for this server
+ * @param socket - socket for the given player
+ * @param data - dataObject containing:
+ * gameId: number;
+ * nickname: string;
+ */
 export const joinGameEvent = (
   socket: Socket,
   io: Server,
