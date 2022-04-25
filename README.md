@@ -22,10 +22,16 @@ Click [here](https://github.com/FabianFoss/color-splash-frontend) to get to the 
 Our project is divided into two distinct repositories as they are not dependent of each other.
 
 ## How to compile and run backend
+Move to the backend folder, command: ```cd backend```.
+
+Start by installing all dependencies by running ```npm install```.
+
+Then to run the backend run the command: ```npm start ```. The project will build itself, and compile it to the ```/dist folder```. It will also recompile on changes. The server will run on ```http://localhost:8000``` if not a port is specified in an ```.env file```.
+
+If you want to build the backend run: ```npm run build```. The build will appear in the ```/dist folder```.
 
 
 ## Contributors
-**The group consists of:**<br>
 [Fabian Foss Budal](https://github.com/FabianFoss)<br>
 [Carl Valdemar Ebbesen](https://github.com/Carlvebbesen)<br>
 [Ingrid Hagen](https://github.com/hageningrid)<br>
