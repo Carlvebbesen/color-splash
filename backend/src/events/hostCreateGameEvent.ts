@@ -35,7 +35,7 @@ export const hostCreateGameEvent = (
   const newGame: game = {
     gameId: gameId,
     hostId: host.socketId,
-    maxRound: data.rounds && data.rounds <= 4 ? data.rounds : 4,
+    maxRound: data.rounds ?? 4,
     maxPlayers: data.maxPlayers ?? 4,
     difficulty: data.difficulty ?? "easy",
     players: [],
