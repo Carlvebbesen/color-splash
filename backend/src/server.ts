@@ -66,6 +66,11 @@ io.on("connection", (socket: socket.Socket) => {
   socket.on(endGame, (data: onlyGameId) => endGameEvent(socket, io, data));
   socket.on(leaveGame, (data: onlyGameId) => leaveGameEvent(io, socket, data));
 });
+app.get("/gameApk", (_, res) => {
+  const file = "./src/downloadGame/android-debug.apk";
+  res.download(file);
+  res.status(200);
+});
 app.get("/", (_, res) => {
   const gameStateString = getGameStateAsString();
   const playerStateString = getPlayerAsString();
@@ -81,7 +86,11 @@ app.get("/", (_, res) => {
     ${gameStateString} <br/>
     <br/>
     ${playerStateString} <br/>
-      </body>
+
+    <br/>
+    <br/>
+    <h2> Download the game for android <a href="https://color-splash.herokuapp.com/gameApk" download="ColorSplash.apk">here</a> </h2>
+    </body>
 </html>
     `
   );
