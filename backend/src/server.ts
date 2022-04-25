@@ -83,10 +83,10 @@ app.get("/", (_, res) => {
   </head>
   <body>
   <!-- Your HTML here -->
-  <p>Welcome to an Express server with websockets!<br/><br/>Port: ${port}.<br/>PlayerCount: ${io.engine.clientsCount}.</p>
-  <br/>
-  <br/>
+  <h2>Welcome to the Color Splash server!</h2><p> This is an Express server built with websockets using socket.IO! View the code for this server <a href="https://github.com/Carlvebbesen/color-splash">here</a> and view the frontend code <a href="https://github.com/FabianFoss/color-splash-frontend">here</a><br/><br/>Port: ${port}<br/>Players connected: ${io.engine.clientsCount}</p>
   <h2> Download the game for android <a href="https://color-splash.herokuapp.com/download-apk" download="ColorSplash.apk">here</a> </h2>
+  <img height="300" style="margin-right:1cm" src="https://camo.githubusercontent.com/019da4ff0a5764bd8f813a55594497af1075a8519a9ec004798c4cb9d5428428/68747470733a2f2f696d6775722e636f6d2f6c716c6e5a4e4a2e706e67" alt="Color-splash-game"><img height="300" src="https://camo.githubusercontent.com/24c36dc95c76e89cfab69077d5963586f132be9483ce839b547b99517b05ef00/68747470733a2f2f696d6775722e636f6d2f306f7339626c652e706e67" alt="Color-splash-ingame">
+  <br/>
   <br/>
   The current state of the game is:<br/>
   <br/>
