@@ -1,7 +1,7 @@
 # ColorSplash Backend
 ColorSplash is a multiplayer game created for Android devices as the main project for the course TDT4240 Software Architecture at NTNU.
-This is the backend repository running the Heroku server [here](https://color-splash.herokuapp.com/).
-Click [here](https://github.com/FabianFoss/color-splash-frontend) to get to the frontend repositry. Here you can run the project and game locally.
+This is the backend repository running the Heroku server [here](https://color-splash.herokuapp.com/). <br/><br/>
+Click [here](https://github.com/FabianFoss/color-splash-frontend) to get to **the frontend repositry**. Here you can run the project and game locally.
 
 ## Structure
 ```
