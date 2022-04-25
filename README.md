@@ -6,16 +6,16 @@ Click [here](https://github.com/FabianFoss/color-splash-frontend) to get to the 
 ## Structure
 ```
 .
-├── .github/workflows
-├── backend
+├── .github/workflows #CI/CD to push the backend to Heroku, the hosting service we decided to use.
+├── backend #The folder containing all backend code
   ├── src
-    ├── events
-    ├── serverState
-    └── types
+    ├── events #Folder containing all the different events our server listen on
+    ├── serverState #Folder containing the internal serverstate, for alle games and players
+    └── types #All the types used in backend
   ├── .DS_Store
-  ├── globalEvents.ts
-  ├── server.ts
-  └── utils.ts
+  ├── globalEvents.ts #all the different events to send and recieve as string constants
+  ├── server.ts #the file setting up the server and socket.io connection
+  └── utils.ts #all logical functions used backend
 ├── .DS_Store               
 └──  README.md
 ```
